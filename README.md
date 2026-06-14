@@ -36,7 +36,8 @@ locked decisions**:
 ```bash
 corepack enable pnpm          # provision pnpm (see CONTRIBUTING)
 pnpm install --frozen-lockfile
-pnpm typecheck && pnpm lint && pnpm test && pnpm build
+pnpm build                          # build libs first: cross-package types resolve via exports → dist
+pnpm typecheck && pnpm lint && pnpm test
 ```
 
 Tests run with `TZ=UTC` for deterministic timezone behavior; the Worker tests run inside the
