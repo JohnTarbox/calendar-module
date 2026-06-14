@@ -1,0 +1,15 @@
+name = "calendar-module-worker"
+main = "src/worker.tsx"
+compatibility_date = "2024-12-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Local Miniflare D1 for v0 (no production access on this machine). The real MMATF D1 +
+# Cloudflare preview deploy are the connected-environment follow-on (ES §0 air-gap note).
+[[d1_databases]]
+binding = "DB"
+database_name = "calendar-local"
+database_id = "local-placeholder-0000"
+migrations_dir = "migrations"
+
+[vars]
+DISPLAY_TZ = "America/New_York"

@@ -1,0 +1,31 @@
+{
+  "name": "@calendar-module/worker",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Cloudflare Worker — windowed D1 endpoint + MMATF adapter + SSR Month (local Miniflare for v0).",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "dev": "wrangler dev",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@calendar-module/contract": "workspace:*",
+    "@calendar-module/core": "workspace:*",
+    "@calendar-module/react": "workspace:*",
+    "luxon": "^3.5.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.5.40",
+    "@cloudflare/workers-types": "^4.20241218.0",
+    "@types/luxon": "^3.4.2",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "typescript": "^5.7.2",
+    "vitest": "2.1.8",
+    "wrangler": "^3.95.0"
+  }
+}
