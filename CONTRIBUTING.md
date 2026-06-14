@@ -18,10 +18,24 @@ Add it automatically with `git commit -s`. PRs with unsigned commits will be ask
 - **Node 20+**, **pnpm** (provisioned via corepack: `corepack enable pnpm`).
 - Commit the lockfile. CI runs `pnpm install --frozen-lockfile` — never a plain install.
 
+## Workflow
+
+- **Work on a branch and open a PR** — don't push straight to `main`. CI runs on the PR, so a
+  red build is caught *before* it reaches the shared branch (and never lands on `main`).
+- **`pnpm verify` is the single source of truth.** It runs `build → typecheck → lint → test`
+  in that order — the same script CI runs and the same one the pre-push hook runs, so
+  "passes locally" and "passes in CI" cannot diverge. (The build must come first: cross-package
+  imports resolve through each package's `exports` → `dist`, so the libs are built before
+  anything typechecks or tests against them.)
+- **A pre-push hook runs `pnpm verify` automatically.** It's wired by the `prepare` script
+  (`git config core.hooksPath .githooks`) on `pnpm install`, so a fresh clone gets it for free.
+  Bypass in an emergency with `git push --no-verify`.
+
 ## Before you push
 
 ```bash
-pnpm typecheck && pnpm lint && pnpm test && pnpm build
+pnpm install --frozen-lockfile
+pnpm verify   # build → typecheck → lint → test (exactly what CI runs)
 ```
 
 - **TDD:** each Reference-Spec rule and `[AC]` becomes a named test — the spec is the test
