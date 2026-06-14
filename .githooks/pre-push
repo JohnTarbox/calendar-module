@@ -1,0 +1,12 @@
+#!/bin/sh
+# Pre-push quality gate. Runs the same `pnpm verify` pipeline CI runs (build → typecheck →
+# lint → test), so a push can't ship something CI would reject — including the build-order
+# trap that caused the earlier red build. Auto-enabled via the root `prepare` script
+# (git config core.hooksPath .githooks). Bypass in an emergency with:  git push --no-verify
+if ! command -v pnpm >/dev/null 2>&1; then
+  echo "pre-push: pnpm not found — skipping verify (install pnpm to enable the gate)" >&2
+  exit 0
+fi
+
+echo "pre-push: running 'pnpm verify' before push (skip with --no-verify)…"
+pnpm verify

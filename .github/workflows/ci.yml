@@ -23,10 +23,10 @@ jobs:
           node-version: 20
           cache: pnpm
       - run: pnpm install --frozen-lockfile # never a plain install (ES §11)
-      - run: pnpm build # build libs first so cross-package types/imports resolve (exports → dist)
-      - run: pnpm typecheck
-      - run: pnpm lint
-      - run: pnpm test # unit + property/fuzz, fixed-seed on PRs (ES §6)
+      # Single source of truth: `verify` = build → typecheck → lint → test, in that order.
+      # The same script runs locally and in the pre-push hook, so "passes locally" and "passes
+      # in CI" can't diverge by command order (the cause of the earlier red build).
+      - run: pnpm verify
 
   # SAST. Free on public repos; wired early per ES §0 but not gating v0 locally.
   codeql:
