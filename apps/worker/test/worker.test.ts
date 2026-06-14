@@ -57,4 +57,21 @@ describe('worker — windowed D1 endpoint + MMATF adapter (workerd runtime)', ()
     const html = await res.text();
     expect(html).toContain('data-testid="cm-error"');
   });
+
+  it('escapes a hostile event title in the embedded <script> JSON (no XSS breakout, ES §7)', async () => {
+    await env.DB.prepare('INSERT INTO events (id, title) VALUES (?1, ?2)')
+      .bind(99, '</script><img src=x onerror=alert(1)>')
+      .run();
+    await env.DB.prepare(
+      "INSERT INTO event_days (id, event_id, day, end_day, all_day) VALUES ('99-d', 99, '2026-06-15', NULL, 1)",
+    ).run();
+
+    const res = await SELF.fetch('https://x/?now=2026-06-14T12:00:00-04:00');
+    const html = await res.text();
+    // The raw closing-tag breakout must NOT appear anywhere (body is React-escaped; the
+    // serialized JSON is escapeForScript-escaped).
+    expect(html).not.toContain('</script><img');
+    // The serialized data carries the title with `<` neutralized to the JSON escape.
+    expect(html).toContain('\\u003c/script');
+  });
 });

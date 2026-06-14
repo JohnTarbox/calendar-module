@@ -27,11 +27,27 @@ function resolveConfig(env: Env, tzOverride?: string | null): CalendarConfig {
 
 class ConfigError extends Error {}
 
+/**
+ * Escape a JSON string for safe embedding inside a `<script>` element. Untrusted event data
+ * (titles, locations) could contain `</script>` or `<!--`, which the HTML parser would act on
+ * even inside `type="application/json"` — a stored-XSS breakout (ES §7, threat #1). Escaping
+ * `<` plus the U+2028 / U+2029 JS line separators keeps the payload a single inert text node;
+ * `JSON.parse` restores the original on hydration since these are valid JSON escapes. The
+ * separator regexes are built from strings so no literal separator bytes live in source.
+ */
+function escapeForScript(json: string): string {
+  return json
+    .replace(/</g, '\\u003c')
+    .replace(new RegExp('\\u2028', 'g'), '\\u2028')
+    .replace(new RegExp('\\u2029', 'g'), '\\u2029');
+}
+
 function htmlShell(body: string, dataScript: string, status = 200): Response {
+  const safeData = escapeForScript(dataScript);
   const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Events</title></head><body><div id="root">${body}</div>
-<script type="application/json" id="cm-initial-data">${dataScript}</script>
+<script type="application/json" id="cm-initial-data">${safeData}</script>
 </body></html>`;
   return new Response(html, { status, headers: { 'content-type': 'text/html; charset=utf-8' } });
 }
