@@ -1,5 +1,12 @@
 # @jonnyboats/calendar-react
 
+## 1.0.2
+
+### Patch Changes
+
+- Ongoing strip now renders a human-readable through-date ("Dec 19, 2026") instead of the raw ISO
+  date ("2026-12-19"). Surfaced by the live MMATF integration.
+
 ## 1.0.1
 
 ### Patch Changes

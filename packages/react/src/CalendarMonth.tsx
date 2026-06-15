@@ -14,7 +14,7 @@ import {
   type DayKey,
   type LayoutCaps,
 } from '@jonnyboats/calendar-core';
-import { dayNumber, monthTitle, weekdayShort } from './format.js';
+import { dayNumber, formatDayMedium, monthTitle, weekdayShort } from './format.js';
 import { EmptyWindow, FetchError, MonthSkeleton } from './states.js';
 import { DayPopover, EventDetailPopover, type DayEntry } from './popovers.js';
 
@@ -272,7 +272,7 @@ export function MonthSkin(props: MonthSkinProps): ReactNode {
                 style={eventColor(s.eventId) ? { background: eventColor(s.eventId) } : undefined}
                 onClick={(e) => openEvent(s.eventId, s.occurrenceId, e.currentTarget)}
               >
-                Ongoing through {s.throughDate}: {s.title}
+                Ongoing through {formatDayMedium(s.throughDate, config.locale)}: {s.title}
               </button>
             </li>
           ))}
