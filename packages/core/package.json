@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "Headless events-calendar engine — pure TS, no React/DOM/Cloudflare.",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnTarbox/calendar-module.git",
+    "directory": "packages/core"
+  },
   "type": "module",
   "sideEffects": false,
   "exports": {
