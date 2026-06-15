@@ -1,15 +1,28 @@
-name: Release
+name: Release (npm OIDC)
 
-# Publishes the packages to npm via OIDC Trusted Publishing (ES §7 — no long-lived tokens).
-# Manually triggered this phase (not auto-publishing). One-time setup on npmjs.com: configure a
-# Trusted Publisher for each package pointing at this repo + workflow. `changeset version` is run
-# in the repo to set 1.0.0; this workflow publishes whatever versions are committed.
+# Publishes the packages to npm using GitHub Actions OIDC "Trusted Publishing" — NO npm tokens,
+# NO 2FA prompt (ES §7). It also attaches a build-provenance attestation.
+#
+# ── One-time setup on npmjs.com (per package) ──────────────────────────────────────────────
+# For EACH of @jonnyboats/calendar-contract, -core, -react:
+#   package page → Settings → Trusted Publishers → Add GitHub Actions publisher with
+#     Organization/User: JohnTarbox
+#     Repository:        calendar-module
+#     Workflow filename: release.yml
+#   (leave "Environment" blank unless you add one below). The packages already exist on npm,
+#   so this can be configured now.
+#
+# ── To cut a release ───────────────────────────────────────────────────────────────────────
+#   1. pnpm changeset            # describe the change (+ a `major` for any CalendarEvent change)
+#   2. pnpm changeset version    # bumps versions + CHANGELOGs; commit + merge to main
+#   3. Actions → "Release (npm OIDC)" → Run workflow
+# It publishes only the new versions; npm rejects re-publishing a version already on the registry.
 on:
   workflow_dispatch:
 
 permissions:
   contents: read
-  id-token: write # OIDC: lets npm verify the publish without a stored token; enables provenance
+  id-token: write # REQUIRED for OIDC: lets npm verify the publisher and emit provenance
 
 jobs:
   publish:
@@ -23,11 +36,21 @@ jobs:
         with:
           node-version: 20
           cache: pnpm
-          registry-url: https://registry.npmjs.org
+      # OIDC Trusted Publishing needs a recent npm (>= 11.5); the Node 20 bundled npm is older.
+      - run: npm install -g npm@latest
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      - run: pnpm verify
-      # Publishes packages whose version isn't yet on the registry. Provenance via OIDC.
-      - run: pnpm -r --filter "./packages/*" publish --access public --no-git-checks
-        env:
-          NPM_CONFIG_PROVENANCE: 'true'
+      # `pnpm pack` rewrites each package's `workspace:*` deps to the real version inside the
+      # tarball (npm by itself can't resolve the workspace protocol).
+      - name: Pack packages
+        run: |
+          for pkg in contract core react; do
+            ( cd "packages/$pkg" && pnpm pack )
+          done
+      # npm (>= 11.5) publishes each tarball via OIDC — no token — with a provenance attestation.
+      - name: Publish to npm (OIDC + provenance)
+        run: |
+          for tgz in packages/*/*.tgz; do
+            echo "publishing $tgz"
+            npm publish "$tgz" --provenance --access public
+          done
