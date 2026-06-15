@@ -15,8 +15,9 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "verify": "pnpm build && pnpm typecheck && pnpm lint && pnpm test",
+    "verify": "pnpm build && pnpm typecheck && pnpm lint && pnpm test && pnpm guard:changeset",
     "guard:changeset": "node scripts/changeset-guard.mjs",
+    "gen:schema": "node scripts/gen-schema.mjs",
     "changeset": "changeset",
     "storybook": "pnpm --filter @calendar-module/harness storybook",
     "prepare": "git config core.hooksPath .githooks || true"

@@ -25,13 +25,12 @@ jobs:
           node-version: 20
           cache: pnpm
       - run: pnpm install --frozen-lockfile # never a plain install (ES §11)
-      # Single source of truth: `verify` = build → typecheck → lint → test, in that order.
-      # The same script runs locally and in the pre-push hook, so "passes locally" and "passes
-      # in CI" can't diverge by command order (the cause of the earlier red build).
-      - run: pnpm verify
-      # The contract is the seam: a CalendarEvent change must carry a major changeset.
+      # Fetch main so `verify`'s changeset-guard can diff the contract schema against it.
       - run: git fetch --no-tags origin main || true
-      - run: pnpm guard:changeset
+      # Single source of truth: `verify` = build → typecheck → lint → test → guard:changeset, in
+      # that order. The SAME script runs locally and in the pre-push hook, so "passes locally" and
+      # "passes in CI" cannot diverge (the guard used to be a CI-only step — that was the gap).
+      - run: pnpm verify
 
   # SAST. Free on public repos; wired early per ES §0 but not gating v0 locally.
   codeql:
