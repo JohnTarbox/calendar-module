@@ -36,7 +36,12 @@ Add it automatically with `git commit -s`. PRs with unsigned commits will be ask
 ```bash
 pnpm install --frozen-lockfile
 pnpm verify   # build → typecheck → lint → test (exactly what CI runs)
+pnpm smoke    # packs the real tarballs, installs them clean, and SSR-renders the published artifact
 ```
+
+`pnpm smoke` is the packaging gate (CI runs it too): it catches a dropped `"use client"`
+directive, a broken `exports` map, or a missing styles file — regressions the source-level suite
+can't see because it tests `src/`, not the published tarball.
 
 - **TDD:** each Reference-Spec rule and `[AC]` becomes a named test — the spec is the test
   backlog (ES §6). Property/fuzz tests run fixed-seed on PRs and random-seed nightly; persist
