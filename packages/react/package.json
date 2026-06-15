@@ -1,6 +1,6 @@
 {
   "name": "@jonnyboats/calendar-react",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "React Month skin + theming tokens for the calendar module.",
   "license": "Apache-2.0",
   "type": "module",

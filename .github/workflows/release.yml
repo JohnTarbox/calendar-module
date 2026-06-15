@@ -47,10 +47,18 @@ jobs:
           for pkg in contract core react; do
             ( cd "packages/$pkg" && pnpm pack )
           done
-      # npm (>= 11.5) publishes each tarball via OIDC — no token — with a provenance attestation.
-      - name: Publish to npm (OIDC + provenance)
+      # npm (>= 11.5) publishes each NEW version via OIDC — no token — with provenance. Versions
+      # already on the registry are skipped, so a partial release (only some packages bumped, the
+      # changesets norm) doesn't fail on the unchanged ones.
+      - name: Publish changed versions to npm (OIDC + provenance)
         run: |
-          for tgz in packages/*/*.tgz; do
-            echo "publishing $tgz"
-            npm publish "$tgz" --provenance --access public
+          for pkg in contract core react; do
+            name=$(node -p "require('./packages/$pkg/package.json').name")
+            version=$(node -p "require('./packages/$pkg/package.json').version")
+            if npm view "$name@$version" version >/dev/null 2>&1; then
+              echo "skip $name@$version (already on npm)"
+            else
+              echo "publishing $name@$version"
+              npm publish "packages/$pkg"/*.tgz --provenance --access public
+            fi
           done
