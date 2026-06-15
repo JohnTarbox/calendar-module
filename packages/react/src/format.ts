@@ -1,4 +1,4 @@
-import { isAllowedUrl } from '@johntarbox/calendar-contract';
+import { isAllowedUrl } from '@jonnyboats/calendar-contract';
 
 /**
  * Display formatting helpers. Uses the built-in `Intl` (no Luxon in the skin) and treats day

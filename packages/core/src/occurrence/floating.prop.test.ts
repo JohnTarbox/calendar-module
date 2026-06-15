@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import fc from 'fast-check';
-import type { CalendarConfig } from '@johntarbox/calendar-contract';
+import type { CalendarConfig } from '@jonnyboats/calendar-contract';
 import { resolveSpan } from '../time/span.js';
 
 const ZONES = [

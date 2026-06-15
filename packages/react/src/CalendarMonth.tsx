@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
-import type { CalendarConfig, CalendarEvent, Occurrence } from '@johntarbox/calendar-contract';
+import type { CalendarConfig, CalendarEvent, Occurrence } from '@jonnyboats/calendar-contract';
 import {
   buildMonthGrid,
   packMonth,
@@ -13,7 +13,7 @@ import {
   generateIcs,
   type DayKey,
   type LayoutCaps,
-} from '@johntarbox/calendar-core';
+} from '@jonnyboats/calendar-core';
 import { dayNumber, monthTitle, weekdayShort } from './format.js';
 import { EmptyWindow, FetchError, MonthSkeleton } from './states.js';
 import { DayPopover, EventDetailPopover, type DayEntry } from './popovers.js';

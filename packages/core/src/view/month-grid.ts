@@ -1,4 +1,4 @@
-import type { CalendarConfig } from '@johntarbox/calendar-contract';
+import type { CalendarConfig } from '@jonnyboats/calendar-contract';
 import { DateTime } from 'luxon';
 import {
   addDays,

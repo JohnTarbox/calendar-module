@@ -1,9 +1,9 @@
 import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
-import type { CalendarConfig } from '@johntarbox/calendar-contract';
-import { validateConfig } from '@johntarbox/calendar-contract';
-import { buildMonthGrid, todayMonthAnchor } from '@johntarbox/calendar-core';
-import { CalendarMonth } from '@johntarbox/calendar-react';
+import type { CalendarConfig } from '@jonnyboats/calendar-contract';
+import { validateConfig } from '@jonnyboats/calendar-contract';
+import { buildMonthGrid, todayMonthAnchor } from '@jonnyboats/calendar-core';
+import { CalendarMonth } from '@jonnyboats/calendar-react';
 import { fetchWindow, type Env } from './data.js';
 
 /**

@@ -1,4 +1,4 @@
-import type { CalendarEvent } from '@johntarbox/calendar-contract';
+import type { CalendarEvent } from '@jonnyboats/calendar-contract';
 
 /**
  * Category-visibility / legend-filter state (RS §6, ES §2).

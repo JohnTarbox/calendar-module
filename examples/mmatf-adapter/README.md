@@ -8,7 +8,7 @@ This is the **reference** mapping from MMATF's `events` + `event_days` D1 tables
    price, or hero concepts. The MMATF-specific mapping is *yours* to own and evolve against your
    real tables.
 2. **It must not drift into the module core.** The module packages
-   (`@johntarbox/calendar-contract` · `core` · `react`) **must never import this file.** Only a
+   (`@jonnyboats/calendar-contract` · `core` · `react`) **must never import this file.** Only a
    host/demo (e.g. the local `apps/worker`) consumes it.
 
 ## What it does

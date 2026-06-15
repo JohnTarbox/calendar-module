@@ -15,9 +15,9 @@ a single versioned `CalendarEvent` contract.
 
 | Package | Role |
 |---|---|
-| `@johntarbox/calendar-contract` | `CalendarEvent`/`Occurrence`/`CalendarConfig` types + Zod `validateEvent`/`validateWindow` + JSON schema. The SemVer-frozen seam. |
-| `@johntarbox/calendar-core` | Headless engine — pure TS, **no React/DOM/Cloudflare**. Occurrence model, lane-packing, ongoing rule, `.ics`, Luxon view math, a11y state model. |
-| `@johntarbox/calendar-react` | Month skin + theming tokens. Binds the core a11y API to the DOM; renders nothing unsafe. |
+| `@jonnyboats/calendar-contract` | `CalendarEvent`/`Occurrence`/`CalendarConfig` types + Zod `validateEvent`/`validateWindow` + JSON schema. The SemVer-frozen seam. |
+| `@jonnyboats/calendar-core` | Headless engine — pure TS, **no React/DOM/Cloudflare**. Occurrence model, lane-packing, ongoing rule, `.ics`, Luxon view math, a11y state model. |
+| `@jonnyboats/calendar-react` | Month skin + theming tokens. Binds the core a11y API to the DOM; renders nothing unsafe. |
 | `apps/harness` | Storybook + fixtures (dev/test harness; no network). |
 | `apps/worker` | Cloudflare Worker — windowed data endpoint + OpenNext SSR Month + MMATF adapter (local Miniflare D1 for v0). |
 

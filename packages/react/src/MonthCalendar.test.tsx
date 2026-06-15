@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, within } from '@testing-library/react';
-import type { CalendarEvent } from '@johntarbox/calendar-contract';
+import type { CalendarEvent } from '@jonnyboats/calendar-contract';
 import { MonthCalendar, validateEvent, validateWindow, validateConfig } from './index.js';
 
 const NOW = '2026-06-14T12:00:00-04:00';

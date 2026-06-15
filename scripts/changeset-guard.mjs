@@ -19,7 +19,7 @@ import { existsSync, readFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { SCHEMA_PATH, serialize } from './schema-artifact.mjs';
 
-const CONTRACT_PKG = '@johntarbox/calendar-contract';
+const CONTRACT_PKG = '@jonnyboats/calendar-contract';
 const BASE = process.env.CHANGESET_GUARD_BASE || 'origin/main';
 if (!/^[\w./-]+$/.test(BASE)) {
   console.error(`changeset-guard: refusing unsafe base ref '${BASE}'.`);

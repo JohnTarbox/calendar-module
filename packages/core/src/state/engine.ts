@@ -1,4 +1,4 @@
-import type { CalendarConfig, CalendarEvent } from '@johntarbox/calendar-contract';
+import type { CalendarConfig, CalendarEvent } from '@jonnyboats/calendar-contract';
 import type { DayKey } from '../time/day.js';
 import { buildMonthGrid, type CalendarGrid } from '../view/month-grid.js';
 import {

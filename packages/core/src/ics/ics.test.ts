@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import fc from 'fast-check';
-import type { CalendarConfig, CalendarEvent } from '@johntarbox/calendar-contract';
+import type { CalendarConfig, CalendarEvent } from '@jonnyboats/calendar-contract';
 import { escapeIcsText } from './escape.js';
 import { generateIcs } from './generate.js';
 

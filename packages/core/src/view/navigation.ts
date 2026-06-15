@@ -1,4 +1,4 @@
-import type { CalendarConfig } from '@johntarbox/calendar-contract';
+import type { CalendarConfig } from '@jonnyboats/calendar-contract';
 import { dayKeyOf, dayToDateTime, type DayKey } from '../time/day.js';
 import { bucketDay } from '../time/instant.js';
 import { monthStartOf } from './month-grid.js';

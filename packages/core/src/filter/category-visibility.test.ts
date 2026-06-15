@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { CalendarEvent } from '@johntarbox/calendar-contract';
+import type { CalendarEvent } from '@jonnyboats/calendar-contract';
 import { createCategoryVisibility } from './category-visibility.js';
 
 const events: CalendarEvent[] = [

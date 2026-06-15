@@ -1,11 +1,11 @@
 /**
- * `@johntarbox/calendar-react` — the React Month skin and the host-facing `MonthCalendar` mount API.
+ * `@jonnyboats/calendar-react` — the React Month skin and the host-facing `MonthCalendar` mount API.
  *
  * This package is a CLIENT component: the `"use client"` directive is injected at the top of the
  * built entry (`dist/index.js`) by the tsup post-build step, so a host Next.js App Router Server
  * Component can import `MonthCalendar` directly. Render-safe: all text is React-escaped; links
  * pass the Zod URL allowlist via `safeHref`; never `dangerouslySetInnerHTML`. Import the default
- * styles once from `@johntarbox/calendar-react/styles`.
+ * styles once from `@jonnyboats/calendar-react/styles`.
  */
 
 // Public mount API
@@ -42,4 +42,4 @@ export {
   type Occurrence,
   type CalendarConfig,
   type ValidationResult,
-} from '@johntarbox/calendar-contract';
+} from '@jonnyboats/calendar-contract';
