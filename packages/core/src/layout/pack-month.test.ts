@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { CalendarConfig, CalendarEvent } from '@calendar-module/contract';
+import type { CalendarConfig, CalendarEvent } from '@johntarbox/calendar-contract';
 import { buildMonthGrid } from '../view/month-grid.js';
 import { packMonth } from './pack-month.js';
 import type { LayoutCaps } from './types.js';

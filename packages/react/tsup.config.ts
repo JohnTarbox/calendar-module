@@ -13,7 +13,7 @@ export default defineConfig({
   // chunk so there is exactly one entry to mark. A build-artifact test asserts it survives, so a
   // regression fails CI. This is what makes `import { MonthCalendar }` legal in a host RSC tree.
   splitting: false,
-  external: ['react', 'react-dom', '@calendar-module/core', '@calendar-module/contract'],
+  external: ['react', 'react-dom', '@johntarbox/calendar-core', '@johntarbox/calendar-contract'],
   loader: { '.css': 'copy' },
   async onSuccess() {
     const { readFile, writeFile } = await import('node:fs/promises');

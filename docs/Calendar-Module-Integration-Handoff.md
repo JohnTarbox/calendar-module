@@ -5,7 +5,7 @@
 renders it. You never fork module internals; the module never learns MMATF-isms. This document is
 what you build against.
 
-> **Pin `@calendar-module/react@^1.0.0`** (or the `v1.0.0` git tag). **Any `CalendarEvent` change
+> **Pin `@johntarbox/calendar-react@^1.0.0`** (or the `v1.0.0` git tag). **Any `CalendarEvent` change
 > is a major bump** — treat a major as a coordinated migration.
 
 ---
@@ -13,8 +13,8 @@ what you build against.
 ## 1. The mount API
 
 ```tsx
-import { MonthCalendar, validateWindow } from '@calendar-module/react';
-import '@calendar-module/react/styles'; // once, in your root layout
+import { MonthCalendar, validateWindow } from '@johntarbox/calendar-react';
+import '@johntarbox/calendar-react/styles'; // once, in your root layout
 ```
 
 `MonthCalendar` is a **client component** (the `"use client"` directive is baked into the package
@@ -61,8 +61,10 @@ interface Occurrence {
 }
 ```
 
-- The published **JSON Schema** is exported as `calendarEventJsonSchema` from
-  `@calendar-module/react` (and `@calendar-module/contract`).
+- The published **JSON Schema** is committed at
+  [`docs/schema/calendar-event.schema.json`](./schema/calendar-event.schema.json) (generated from
+  the package, so it can't drift) and is also exported as `calendarEventJsonSchema` from
+  `@johntarbox/calendar-react` (and `@johntarbox/calendar-contract`).
 - **Validators** (re-exported from the package): `validateEvent(e)` (shape + URL allowlist),
   `validateWindow(events[])` (id-uniqueness + occurrences sorted ascending), `validateConfig(cfg)`
   (IANA `displayTimeZone`). Run `validateWindow` on every window you fetch.
@@ -131,6 +133,28 @@ Full record + rationale: [`docs/DECISIONS-v0-overflow.md`](./DECISIONS-v0-overfl
 
 The "+N more" indicator consumes one row when a cell overflows (#2), and a hidden multi-day ribbon
 is counted in "+N more" in **every** cell it spans (all-cells-or-none).
+
+### `LayoutCaps` geometry (the exact numbers)
+
+The engine computes the per-cell overflow cap from cell geometry you pass as `caps`. **Pass the
+geometry that matches your rendered CSS** so the "+N more" math agrees with what's actually drawn.
+
+```ts
+interface LayoutCaps {
+  cellHeight: number;   // px — total height of a day cell box
+  headerHeight: number; // px — height reserved for the date-number row at the top of the cell
+  rowHeight: number;    // px — height of ONE event row (ribbon / timed / "+N more")
+}
+```
+
+- **Default** (used when `caps` is omitted): `{ cellHeight: 120, headerHeight: 24, rowHeight: 24 }`.
+- **Cap formula:** `visibleRows = floor((cellHeight − headerHeight) / rowHeight)`.
+  Default → `floor((120 − 24) / 24) = floor(96 / 24) = 4` rows per cell.
+- **Worked example:** if your CSS makes cells 160px tall with a 28px date header and 22px event
+  rows, pass `{ cellHeight: 160, headerHeight: 28, rowHeight: 22 }` → `floor((160−28)/22) = 6` rows.
+- All three are **CSS pixels** and must match your stylesheet's cell box, or the engine will hide
+  too many or too few rows relative to what fits. Bars (ribbons/all-day) reserve rows top-down;
+  timed events fill the remainder; the last visible row becomes "+N more" when a cell overflows.
 
 ---
 

@@ -42,9 +42,10 @@ pnpm verify   # build → typecheck → lint → test (exactly what CI runs)
   backlog (ES §6). Property/fuzz tests run fixed-seed on PRs and random-seed nightly; persist
   any failing seed as a permanent regression.
 - **The contract is the seam.** Nothing in `core`/`react` may import Cloudflare; the contract
-  carries no MMATF-isms. **Any change to the `CalendarEvent` contract is a SemVer-MAJOR bump** —
-  add a `major` changeset for `@calendar-module/contract` (`pnpm changeset`). CI enforces this:
-  `pnpm guard:changeset` fails if `packages/contract/src/{schema,types}.ts` changed without one.
+  carries no MMATF-isms. **Any change to the `CalendarEvent` shape is a SemVer-MAJOR bump** — after
+  changing the contract, run `pnpm gen:schema` (regenerates the committed JSON schema) and add a
+  `major` changeset for `@johntarbox/calendar-contract` (`pnpm changeset`). `verify`'s
+  `guard:changeset` fails if the generated schema changed without a major changeset (or is stale).
   A host (e.g. MMATF) pins `^1.0.0` and treats a major as a coordinated migration.
 - **Render-safety is non-negotiable:** never `dangerouslySetInnerHTML` untrusted content; the
   Zod URL/`mapUrl` allowlist is the single protocol gate (ES §7).

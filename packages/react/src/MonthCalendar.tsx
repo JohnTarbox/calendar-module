@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
-import type { CalendarEvent, Occurrence } from '@calendar-module/contract';
-import { validateConfig } from '@calendar-module/contract';
-import { addDays, type DayKey, type LayoutCaps } from '@calendar-module/core';
+import type { CalendarEvent, Occurrence } from '@johntarbox/calendar-contract';
+import { validateConfig } from '@johntarbox/calendar-contract';
+import { addDays, type DayKey, type LayoutCaps } from '@johntarbox/calendar-core';
 import {
   MonthSkin,
   type DayPopoverSlotCtx,

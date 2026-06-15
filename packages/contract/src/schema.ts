@@ -6,7 +6,7 @@ import { isValidTimeZone } from './zone.js';
  * Zod schemas are the runtime source of truth for the `CalendarEvent` contract (ES §5).
  * The public TypeScript types in `./types.ts` are inferred from these, so the static and
  * runtime shapes can never drift. This module is also a published entry point
- * (`@calendar-module/contract/schema`) for consumers that want the raw schemas.
+ * (`@johntarbox/calendar-contract/schema`) for consumers that want the raw schemas.
  *
  * Forward-compatibility rule (ES §5): unknown keys are **not** an error here — schemas use
  * `.passthrough()` so additive contract changes stay minor-version. The validators in

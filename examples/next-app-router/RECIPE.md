@@ -8,7 +8,7 @@ published types. Verify the actual mount in your host app.
 ## 1. Install (pin the version)
 
 ```bash
-pnpm add @calendar-module/react@^1.0.0   # or install by the pinned git tag
+pnpm add @johntarbox/calendar-react@^1.0.0   # or install by the pinned git tag
 ```
 
 Any `CalendarEvent` change is a **major** bump — pin to `^1` and treat a major as a coordinated
@@ -18,7 +18,7 @@ migration.
 
 ```tsx
 // app/layout.tsx
-import '@calendar-module/react/styles';
+import '@johntarbox/calendar-react/styles';
 ```
 
 ## 3. Render in a Server Component (`app/calendar/page.tsx`)

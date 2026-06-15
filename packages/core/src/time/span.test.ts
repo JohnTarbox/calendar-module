@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { CalendarConfig, Occurrence } from '@calendar-module/contract';
+import type { CalendarConfig, Occurrence } from '@johntarbox/calendar-contract';
 import { resolveSpan } from './span.js';
 
 const NY: CalendarConfig = { displayTimeZone: 'America/New_York' };

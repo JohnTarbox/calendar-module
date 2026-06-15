@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import fc from 'fast-check';
-import type { CalendarConfig } from '@calendar-module/contract';
+import type { CalendarConfig } from '@johntarbox/calendar-contract';
 import {
   goToDateAnchor,
   nextMonth,

@@ -11,9 +11,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@calendar-module/contract": "workspace:*",
-    "@calendar-module/core": "workspace:*",
-    "@calendar-module/react": "workspace:*",
+    "@johntarbox/calendar-contract": "workspace:*",
+    "@johntarbox/calendar-core": "workspace:*",
+    "@johntarbox/calendar-react": "workspace:*",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

@@ -1,5 +1,5 @@
 {
-  "name": "@calendar-module/contract",
+  "name": "@johntarbox/calendar-contract",
   "version": "1.0.0",
   "description": "Versioned CalendarEvent contract + Zod validators (the SemVer-frozen seam).",
   "license": "Apache-2.0",

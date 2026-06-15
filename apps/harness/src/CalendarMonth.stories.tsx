@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { CalendarMonth } from '@calendar-module/react';
+import { CalendarMonth } from '@johntarbox/calendar-react';
 import { config, events, NOW, overflowEvents } from './fixtures.js';
 
 const meta: Meta<typeof CalendarMonth> = {

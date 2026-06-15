@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/react';
-import '@calendar-module/react/styles';
+import '@johntarbox/calendar-react/styles';
 
 const preview: Preview = {
   parameters: {

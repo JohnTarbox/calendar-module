@@ -1,4 +1,4 @@
-import type { CalendarConfig, Occurrence } from '@calendar-module/contract';
+import type { CalendarConfig, Occurrence } from '@johntarbox/calendar-contract';
 import { addDays, compareDay, diffDays, type DayKey } from './day.js';
 import { bucketDay, parseInstant, wallClockLabel } from './instant.js';
 
