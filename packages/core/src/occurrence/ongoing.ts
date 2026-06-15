@@ -1,4 +1,4 @@
-import type { CalendarConfig, CalendarEvent, Occurrence } from '@calendar-module/contract';
+import type { CalendarConfig, CalendarEvent, Occurrence } from '@johntarbox/calendar-contract';
 import { resolveSpan } from '../time/span.js';
 import { parseInstant } from '../time/instant.js';
 

@@ -1,5 +1,5 @@
 {
-  "name": "@calendar-module/react",
+  "name": "@johntarbox/calendar-react",
   "version": "1.0.0",
   "description": "React Month skin + theming tokens for the calendar module.",
   "license": "Apache-2.0",
@@ -24,8 +24,8 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@calendar-module/contract": "workspace:*",
-    "@calendar-module/core": "workspace:*"
+    "@johntarbox/calendar-contract": "workspace:*",
+    "@johntarbox/calendar-core": "workspace:*"
   },
   "peerDependencies": {
     "react": ">=18 <20",

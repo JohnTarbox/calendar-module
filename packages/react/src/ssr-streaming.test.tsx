@@ -4,7 +4,7 @@ import { renderToPipeableStream } from 'react-dom/server';
 import { hydrateRoot } from 'react-dom/client';
 import { act } from '@testing-library/react';
 import { Writable } from 'node:stream';
-import type { CalendarEvent } from '@calendar-module/contract';
+import type { CalendarEvent } from '@johntarbox/calendar-contract';
 import { MonthCalendar } from './MonthCalendar.js';
 
 const NOW = '2026-06-14T12:00:00-04:00';

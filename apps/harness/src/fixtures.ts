@@ -1,4 +1,4 @@
-import type { CalendarConfig, CalendarEvent } from '@calendar-module/contract';
+import type { CalendarConfig, CalendarEvent } from '@johntarbox/calendar-contract';
 
 /** Shared dev/test fixtures (no network). June 2026, America/New_York. */
 export const config: CalendarConfig = {

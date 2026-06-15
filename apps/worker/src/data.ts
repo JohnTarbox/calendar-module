@@ -1,5 +1,5 @@
-import type { CalendarEvent } from '@calendar-module/contract';
-import { validateWindow } from '@calendar-module/contract';
+import type { CalendarEvent } from '@johntarbox/calendar-contract';
+import { validateWindow } from '@johntarbox/calendar-contract';
 // The MMATF adapter is REFERENCE code (owned by the MMATF dev), consumed here only for the local
 // demo. Module packages never import it. See examples/mmatf-adapter/README.md.
 import { toCalendarEvents, type DayRow, type EventRow } from '@calendar-module/mmatf-adapter-reference';

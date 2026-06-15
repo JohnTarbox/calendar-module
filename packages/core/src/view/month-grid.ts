@@ -1,4 +1,4 @@
-import type { CalendarConfig } from '@calendar-module/contract';
+import type { CalendarConfig } from '@johntarbox/calendar-contract';
 import { DateTime } from 'luxon';
 import {
   addDays,

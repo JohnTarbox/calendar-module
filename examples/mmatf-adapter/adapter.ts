@@ -9,7 +9,7 @@
  * │ The module packages (contract/core/react) MUST NOT import this file.                       │
  * └─────────────────────────────────────────────────────────────────────────────────────────┘
  */
-import type { CalendarEvent, Occurrence } from '@calendar-module/contract';
+import type { CalendarEvent, Occurrence } from '@johntarbox/calendar-contract';
 import { DateTime } from 'luxon';
 
 /** MMATF `events` row shape (representative — reconcile against your real columns). */

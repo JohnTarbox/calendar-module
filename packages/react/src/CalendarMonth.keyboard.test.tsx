@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent, within } from '@testing-library/react';
-import type { CalendarConfig, CalendarEvent } from '@calendar-module/contract';
+import type { CalendarConfig, CalendarEvent } from '@johntarbox/calendar-contract';
 import { CalendarMonth } from './CalendarMonth.js';
 
 const config: CalendarConfig = { displayTimeZone: 'America/New_York', locale: 'en-US' };

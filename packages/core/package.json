@@ -1,5 +1,5 @@
 {
-  "name": "@calendar-module/core",
+  "name": "@johntarbox/calendar-core",
   "version": "1.0.0",
   "description": "Headless events-calendar engine — pure TS, no React/DOM/Cloudflare.",
   "license": "Apache-2.0",
@@ -21,7 +21,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@calendar-module/contract": "workspace:*",
+    "@johntarbox/calendar-contract": "workspace:*",
     "luxon": "^3.5.0"
   },
   "devDependencies": {

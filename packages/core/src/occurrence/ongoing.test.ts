@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { CalendarConfig, CalendarEvent } from '@calendar-module/contract';
+import type { CalendarConfig, CalendarEvent } from '@johntarbox/calendar-contract';
 import { isEventOngoing, isOccurrenceOngoing, occurrenceSpanExceeds14d } from './ongoing.js';
 
 const cfg: CalendarConfig = { displayTimeZone: 'America/New_York' };

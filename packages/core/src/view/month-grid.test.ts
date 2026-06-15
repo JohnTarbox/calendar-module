@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { CalendarConfig } from '@calendar-module/contract';
+import type { CalendarConfig } from '@johntarbox/calendar-contract';
 import { buildMonthGrid } from './month-grid.js';
 
 const NOW = '2026-06-14T12:00:00-04:00';

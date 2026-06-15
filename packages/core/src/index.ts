@@ -1,9 +1,9 @@
 /**
- * `@calendar-module/core` — the headless events-calendar engine.
+ * `@johntarbox/calendar-core` — the headless events-calendar engine.
  *
  * Pure TypeScript: NO React, DOM, or Cloudflare imports (enforced by lint). All the hard,
  * testable logic lives here so it is portable to the web component and the MCP server. The
- * `CalendarEvent` contract from `@calendar-module/contract` is the only seam it depends on.
+ * `CalendarEvent` contract from `@johntarbox/calendar-contract` is the only seam it depends on.
  */
 
 // Time / span
