@@ -14,6 +14,7 @@
     "@calendar-module/contract": "workspace:*",
     "@calendar-module/core": "workspace:*",
     "@calendar-module/react": "workspace:*",
+    "@calendar-module/mmatf-adapter-reference": "workspace:*",
     "luxon": "^3.5.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"

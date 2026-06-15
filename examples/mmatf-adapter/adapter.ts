@@ -1,11 +1,18 @@
+/**
+ * ┌─────────────────────────────────────────────────────────────────────────────────────────┐
+ * │ REFERENCE ADAPTER — owned by the MMATF developer, NOT by the calendar module.             │
+ * │                                                                                           │
+ * │ This is the reference mapping from MMATF's `events` + `event_days` D1 shape to the frozen │
+ * │ `CalendarEvent` contract. It is intentionally OUTSIDE the published packages so it can    │
+ * │ never drift into the module core. The module ships NO MMATF-isms (ES §5/§11); the         │
+ * │ MMATF-specific D1 mapping is the MMATF dev's to own and evolve against their real tables.  │
+ * │ The module packages (contract/core/react) MUST NOT import this file.                       │
+ * └─────────────────────────────────────────────────────────────────────────────────────────┘
+ */
 import type { CalendarEvent, Occurrence } from '@calendar-module/contract';
 import { DateTime } from 'luxon';
 
-/**
- * MMATF adapter: maps the `events` + `event_days` shape → the `CalendarEvent` contract. This is
- * the ONLY place MMATF-isms meet the module (ES §5/§11) — the contract carries none. Occurrence
- * ids reuse the composite `event_days.id` so they are stable + idempotent across windowed loads.
- */
+/** MMATF `events` row shape (representative — reconcile against your real columns). */
 export interface EventRow {
   id: number;
   title: string;
@@ -17,6 +24,7 @@ export interface EventRow {
   lng: number | null;
 }
 
+/** MMATF `event_days` row shape. `end_day` (inclusive) lets one row express a multi-day span. */
 export interface DayRow {
   id: string;
   event_id: number;
@@ -61,6 +69,11 @@ function mapDay(row: DayRow, event: EventRow, zone: string): Occurrence {
   return occ;
 }
 
+/**
+ * Map `events` + `event_days` rows → `CalendarEvent[]`. Occurrence ids reuse the composite
+ * `event_days.id` so they are stable + idempotent across windowed loads. Output is sorted
+ * ascending per event (so it passes the contract's `validateWindow`).
+ */
 export function toCalendarEvents(
   events: EventRow[],
   days: DayRow[],
@@ -79,7 +92,7 @@ export function toCalendarEvents(
     if (!rows || rows.length === 0) continue;
     const occurrences = rows
       .map((r) => mapDay(r, e, displayTimeZone))
-      .sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0)); // ascending (validateWindow)
+      .sort((a, b) => (a.start < b.start ? -1 : a.start > b.start ? 1 : 0));
 
     const event: CalendarEvent = { id: String(e.id), title: e.title, occurrences };
     if (e.category) event.category = e.category;

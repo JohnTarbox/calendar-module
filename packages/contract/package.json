@@ -1,6 +1,6 @@
 {
   "name": "@calendar-module/contract",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Versioned CalendarEvent contract + Zod validators (the SemVer-frozen seam).",
   "license": "Apache-2.0",
   "type": "module",
@@ -17,7 +17,9 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc --noEmit"
