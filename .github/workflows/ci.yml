@@ -31,6 +31,10 @@ jobs:
       # that order. The SAME script runs locally and in the pre-push hook, so "passes locally" and
       # "passes in CI" cannot diverge (the guard used to be a CI-only step — that was the gap).
       - run: pnpm verify
+      # Packaging check: pack the real tarballs, install them into a clean project, and SSR-render
+      # the published artifact — catches a dropped "use client", broken exports, or missing styles
+      # that source-level tests can't see. Same command runs locally: `pnpm smoke`.
+      - run: pnpm smoke
 
   # SAST. Free on public repos; wired early per ES §0 but not gating v0 locally.
   codeql:
