@@ -1,4 +1,4 @@
-# @johntarbox/calendar-react
+# @jonnyboats/calendar-react
 
 ## 1.0.0
 
@@ -7,7 +7,7 @@
 - 1.0.0 — frozen seam + host-embeddable Month.
 
   The `CalendarEvent` contract is declared stable: any future change is a major bump (enforced by
-  `guard:changeset`). `@johntarbox/calendar-react` adds the host-facing **`MonthCalendar`** mount API
+  `guard:changeset`). `@jonnyboats/calendar-react` adds the host-facing **`MonthCalendar`** mount API
   (flat props, theme tokens, render slots, navigation/filter callbacks), ships as a proper client
   component (`"use client"` baked into the package entry) for host Next.js App Router / OpenNext
   embedding, and re-exports the contract validators. `CalendarMonth` is kept as a deprecated alias.
@@ -23,5 +23,5 @@
 
 - Updated dependencies
 - Updated dependencies [448b817]
-  - @johntarbox/calendar-contract@1.0.0
-  - @johntarbox/calendar-core@1.0.0
+  - @jonnyboats/calendar-contract@1.0.0
+  - @jonnyboats/calendar-core@1.0.0

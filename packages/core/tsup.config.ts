@@ -8,5 +8,5 @@ export default defineConfig({
   sourcemap: true,
   treeshake: true,
   // Keep peer/workspace deps external; the engine bundles nothing but its own source.
-  external: ['@johntarbox/calendar-contract', 'luxon'],
+  external: ['@jonnyboats/calendar-contract', 'luxon'],
 });

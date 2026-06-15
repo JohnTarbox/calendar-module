@@ -1,5 +1,5 @@
-import type { CalendarConfig, CalendarEvent, Occurrence } from '@johntarbox/calendar-contract';
-import { isAllowedUrl } from '@johntarbox/calendar-contract';
+import type { CalendarConfig, CalendarEvent, Occurrence } from '@jonnyboats/calendar-contract';
+import { isAllowedUrl } from '@jonnyboats/calendar-contract';
 import { DateTime } from 'luxon';
 import { parseInstant } from '../time/instant.js';
 import { escapeIcsText, serializeLines } from './escape.js';

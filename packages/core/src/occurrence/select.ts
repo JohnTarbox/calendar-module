@@ -1,4 +1,4 @@
-import type { CalendarConfig, CalendarEvent, Occurrence } from '@johntarbox/calendar-contract';
+import type { CalendarConfig, CalendarEvent, Occurrence } from '@jonnyboats/calendar-contract';
 import { parseInstant } from '../time/instant.js';
 import { dayToDateTime } from '../time/day.js';
 import { DateTime } from 'luxon';

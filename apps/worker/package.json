@@ -11,9 +11,9 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@johntarbox/calendar-contract": "workspace:*",
-    "@johntarbox/calendar-core": "workspace:*",
-    "@johntarbox/calendar-react": "workspace:*",
+    "@jonnyboats/calendar-contract": "workspace:*",
+    "@jonnyboats/calendar-core": "workspace:*",
+    "@jonnyboats/calendar-react": "workspace:*",
     "@calendar-module/mmatf-adapter-reference": "workspace:*",
     "luxon": "^3.5.0",
     "react": "^18.3.1",

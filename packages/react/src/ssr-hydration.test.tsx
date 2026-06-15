@@ -3,7 +3,7 @@ import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
 import { hydrateRoot } from 'react-dom/client';
 import { act } from '@testing-library/react';
-import type { CalendarConfig, CalendarEvent } from '@johntarbox/calendar-contract';
+import type { CalendarConfig, CalendarEvent } from '@jonnyboats/calendar-contract';
 import { CalendarMonth } from './CalendarMonth.js';
 
 const config: CalendarConfig = { displayTimeZone: 'America/New_York', locale: 'en-US' };

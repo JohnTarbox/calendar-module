@@ -1,6 +1,6 @@
 import { useEffect, useRef, type ReactNode } from 'react';
-import type { CalendarConfig, CalendarEvent, Occurrence } from '@johntarbox/calendar-contract';
-import { isOccurrencePast, nextUpcomingOccurrence } from '@johntarbox/calendar-core';
+import type { CalendarConfig, CalendarEvent, Occurrence } from '@jonnyboats/calendar-contract';
+import { isOccurrencePast, nextUpcomingOccurrence } from '@jonnyboats/calendar-core';
 import { formatDayLong, safeHref } from './format.js';
 
 const FOCUSABLE = 'a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])';

@@ -5,7 +5,7 @@
 renders it. You never fork module internals; the module never learns MMATF-isms. This document is
 what you build against.
 
-> **Pin `@johntarbox/calendar-react@^1.0.0`** (or the `v1.0.0` git tag). **Any `CalendarEvent` change
+> **Pin `@jonnyboats/calendar-react@^1.0.0`** (or the `v1.0.0` git tag). **Any `CalendarEvent` change
 > is a major bump** — treat a major as a coordinated migration.
 
 ---
@@ -13,8 +13,8 @@ what you build against.
 ## 1. The mount API
 
 ```tsx
-import { MonthCalendar, validateWindow } from '@johntarbox/calendar-react';
-import '@johntarbox/calendar-react/styles'; // once, in your root layout
+import { MonthCalendar, validateWindow } from '@jonnyboats/calendar-react';
+import '@jonnyboats/calendar-react/styles'; // once, in your root layout
 ```
 
 `MonthCalendar` is a **client component** (the `"use client"` directive is baked into the package
@@ -64,7 +64,7 @@ interface Occurrence {
 - The published **JSON Schema** is committed at
   [`docs/schema/calendar-event.schema.json`](./schema/calendar-event.schema.json) (generated from
   the package, so it can't drift) and is also exported as `calendarEventJsonSchema` from
-  `@johntarbox/calendar-react` (and `@johntarbox/calendar-contract`).
+  `@jonnyboats/calendar-react` (and `@jonnyboats/calendar-contract`).
 - **Validators** (re-exported from the package): `validateEvent(e)` (shape + URL allowlist),
   `validateWindow(events[])` (id-uniqueness + occurrences sorted ascending), `validateConfig(cfg)`
   (IANA `displayTimeZone`). Run `validateWindow` on every window you fetch.

@@ -1,6 +1,6 @@
 import { env, SELF } from 'cloudflare:test';
 import { beforeAll, describe, it, expect } from 'vitest';
-import { validateWindow, type CalendarEvent } from '@johntarbox/calendar-contract';
+import { validateWindow, type CalendarEvent } from '@jonnyboats/calendar-contract';
 import { SCHEMA_SQL, SEED_SQL } from '../src/seed.js';
 
 async function applySql(sql: string): Promise<void> {

@@ -1,5 +1,5 @@
 /**
- * `@johntarbox/calendar-contract` — the versioned `CalendarEvent` seam (ES §5).
+ * `@jonnyboats/calendar-contract` — the versioned `CalendarEvent` seam (ES §5).
  *
  * Everything the module produces or consumes codes against these types + validators.
  * SemVer-frozen: a breaking change here is a major version.

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import type { CalendarConfig } from '@johntarbox/calendar-contract';
+import type { CalendarConfig } from '@jonnyboats/calendar-contract';
 import { buildMonthGrid } from '../view/month-grid.js';
 import { createGridFocus } from './grid-focus.js';
 import { createPopoverFocus } from './popover-focus.js';

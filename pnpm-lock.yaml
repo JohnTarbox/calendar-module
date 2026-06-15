@@ -44,13 +44,13 @@ importers:
 
   apps/harness:
     dependencies:
-      '@johntarbox/calendar-contract':
+      '@jonnyboats/calendar-contract':
         specifier: workspace:*
         version: link:../../packages/contract
-      '@johntarbox/calendar-core':
+      '@jonnyboats/calendar-core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@johntarbox/calendar-react':
+      '@jonnyboats/calendar-react':
         specifier: workspace:*
         version: link:../../packages/react
       react:
@@ -90,13 +90,13 @@ importers:
       '@calendar-module/mmatf-adapter-reference':
         specifier: workspace:*
         version: link:../../examples/mmatf-adapter
-      '@johntarbox/calendar-contract':
+      '@jonnyboats/calendar-contract':
         specifier: workspace:*
         version: link:../../packages/contract
-      '@johntarbox/calendar-core':
+      '@jonnyboats/calendar-core':
         specifier: workspace:*
         version: link:../../packages/core
-      '@johntarbox/calendar-react':
+      '@jonnyboats/calendar-react':
         specifier: workspace:*
         version: link:../../packages/react
       luxon:
@@ -136,7 +136,7 @@ importers:
 
   examples/mmatf-adapter:
     dependencies:
-      '@johntarbox/calendar-contract':
+      '@jonnyboats/calendar-contract':
         specifier: workspace:*
         version: link:../../packages/contract
       luxon:
@@ -152,7 +152,7 @@ importers:
 
   examples/next-app-router:
     dependencies:
-      '@johntarbox/calendar-react':
+      '@jonnyboats/calendar-react':
         specifier: workspace:*
         version: link:../../packages/react
       react:
@@ -187,7 +187,7 @@ importers:
 
   packages/core:
     dependencies:
-      '@johntarbox/calendar-contract':
+      '@jonnyboats/calendar-contract':
         specifier: workspace:*
         version: link:../contract
       luxon:
@@ -212,10 +212,10 @@ importers:
 
   packages/react:
     dependencies:
-      '@johntarbox/calendar-contract':
+      '@jonnyboats/calendar-contract':
         specifier: workspace:*
         version: link:../contract
-      '@johntarbox/calendar-core':
+      '@jonnyboats/calendar-core':
         specifier: workspace:*
         version: link:../core
     devDependencies:

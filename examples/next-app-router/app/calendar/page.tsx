@@ -5,7 +5,7 @@
  * typecheck-only here (no Next runtime on the build machine) — it proves the documented call site
  * compiles against the module's real published types. See RECIPE.md for the full integration.
  */
-import { MonthCalendar, validateWindow, type CalendarEvent } from '@johntarbox/calendar-react';
+import { MonthCalendar, validateWindow, type CalendarEvent } from '@jonnyboats/calendar-react';
 
 // Replace with your own D1 / API query for the window. The module never fetches.
 async function loadWindow(start: string, end: string): Promise<CalendarEvent[]> {
