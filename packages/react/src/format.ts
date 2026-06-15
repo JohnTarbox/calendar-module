@@ -40,3 +40,13 @@ export function formatDayLong(dayKey: string, locale = 'en-US'): string {
     timeZone: 'UTC',
   }).format(dayDate(dayKey));
 }
+
+/** Compact human date, e.g. "Dec 19, 2026" — used in the ongoing strip. */
+export function formatDayMedium(dayKey: string, locale = 'en-US'): string {
+  return new Intl.DateTimeFormat(locale, {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(dayDate(dayKey));
+}
