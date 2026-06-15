@@ -1,5 +1,11 @@
 # @jonnyboats/calendar-react
 
+## 1.0.1
+
+### Patch Changes
+
+- Verify the OIDC Trusted Publishing release pipeline (no functional change).
+
 ## 1.0.0
 
 ### Major Changes
