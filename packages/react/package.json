@@ -3,6 +3,11 @@
   "version": "1.0.1",
   "description": "React Month skin + theming tokens for the calendar module.",
   "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohnTarbox/calendar-module.git",
+    "directory": "packages/react"
+  },
   "type": "module",
   "sideEffects": [
     "*.css"
