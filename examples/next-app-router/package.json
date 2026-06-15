@@ -1,0 +1,21 @@
+{
+  "name": "@calendar-module/example-next-app",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Typecheck-only host recipe: mounting MonthCalendar in a Next.js App Router Server Component.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@calendar-module/react": "workspace:*",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "typescript": "^5.7.2"
+  }
+}

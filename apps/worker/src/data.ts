@@ -1,6 +1,8 @@
 import type { CalendarEvent } from '@calendar-module/contract';
 import { validateWindow } from '@calendar-module/contract';
-import { toCalendarEvents, type DayRow, type EventRow } from './adapter.js';
+// The MMATF adapter is REFERENCE code (owned by the MMATF dev), consumed here only for the local
+// demo. Module packages never import it. See examples/mmatf-adapter/README.md.
+import { toCalendarEvents, type DayRow, type EventRow } from '@calendar-module/mmatf-adapter-reference';
 
 export interface Env {
   DB: D1Database;

@@ -1,0 +1,33 @@
+name: Release
+
+# Publishes the packages to npm via OIDC Trusted Publishing (ES §7 — no long-lived tokens).
+# Manually triggered this phase (not auto-publishing). One-time setup on npmjs.com: configure a
+# Trusted Publisher for each package pointing at this repo + workflow. `changeset version` is run
+# in the repo to set 1.0.0; this workflow publishes whatever versions are committed.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # OIDC: lets npm verify the publish without a stored token; enables provenance
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9.15.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm verify
+      # Publishes packages whose version isn't yet on the registry. Provenance via OIDC.
+      - run: pnpm -r --filter "./packages/*" publish --access public --no-git-checks
+        env:
+          NPM_CONFIG_PROVENANCE: 'true'

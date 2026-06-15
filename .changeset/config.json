@@ -7,5 +7,10 @@
   "access": "public",
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
-  "ignore": ["@calendar-module/harness", "@calendar-module/worker"]
+  "ignore": [
+    "@calendar-module/harness",
+    "@calendar-module/worker",
+    "@calendar-module/mmatf-adapter-reference",
+    "@calendar-module/example-next-app"
+  ]
 }

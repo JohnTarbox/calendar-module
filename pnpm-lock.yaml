@@ -93,6 +93,9 @@ importers:
       '@calendar-module/core':
         specifier: workspace:*
         version: link:../../packages/core
+      '@calendar-module/mmatf-adapter-reference':
+        specifier: workspace:*
+        version: link:../../examples/mmatf-adapter
       '@calendar-module/react':
         specifier: workspace:*
         version: link:../../packages/react
@@ -130,6 +133,44 @@ importers:
       wrangler:
         specifier: ^3.95.0
         version: 3.114.17(@cloudflare/workers-types@4.20260613.1)
+
+  examples/mmatf-adapter:
+    dependencies:
+      '@calendar-module/contract':
+        specifier: workspace:*
+        version: link:../../packages/contract
+      luxon:
+        specifier: ^3.5.0
+        version: 3.7.2
+    devDependencies:
+      '@types/luxon':
+        specifier: ^3.4.2
+        version: 3.7.1
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
+
+  examples/next-app-router:
+    dependencies:
+      '@calendar-module/react':
+        specifier: workspace:*
+        version: link:../../packages/react
+      react:
+        specifier: ^18.3.1
+        version: 18.3.1
+      react-dom:
+        specifier: ^18.3.1
+        version: 18.3.1(react@18.3.1)
+    devDependencies:
+      '@types/react':
+        specifier: ^18.3.18
+        version: 18.3.31
+      '@types/react-dom':
+        specifier: ^18.3.5
+        version: 18.3.7(@types/react@18.3.31)
+      typescript:
+        specifier: ^5.7.2
+        version: 5.9.3
 
   packages/contract:
     dependencies:

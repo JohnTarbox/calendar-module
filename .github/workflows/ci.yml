@@ -15,6 +15,8 @@ jobs:
       TZ: UTC # deterministic timezone tests (ES §6)
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history so the CalendarEvent-major guard can diff against main
       - uses: pnpm/action-setup@v4
         with:
           version: 9.15.0
@@ -27,6 +29,9 @@ jobs:
       # The same script runs locally and in the pre-push hook, so "passes locally" and "passes
       # in CI" can't diverge by command order (the cause of the earlier red build).
       - run: pnpm verify
+      # The contract is the seam: a CalendarEvent change must carry a major changeset.
+      - run: git fetch --no-tags origin main || true
+      - run: pnpm guard:changeset
 
   # SAST. Free on public repos; wired early per ES §0 but not gating v0 locally.
   codeql:

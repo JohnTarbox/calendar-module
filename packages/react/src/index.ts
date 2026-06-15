@@ -1,15 +1,45 @@
 /**
- * `@calendar-module/react` — the React Month skin. Renders from the headless core's
- * `MonthLayout` and binds the core a11y API to the DOM (the core owns the logic; the skin only
- * binds, S2-7). Render-safe: all text is React-escaped; links pass the Zod URL allowlist via
- * `safeHref`; never `dangerouslySetInnerHTML`. Import the default styles from
- * `@calendar-module/react/styles`.
+ * `@calendar-module/react` — the React Month skin and the host-facing `MonthCalendar` mount API.
+ *
+ * This package is a CLIENT component: the `"use client"` directive is injected at the top of the
+ * built entry (`dist/index.js`) by the tsup post-build step, so a host Next.js App Router Server
+ * Component can import `MonthCalendar` directly. Render-safe: all text is React-escaped; links
+ * pass the Zod URL allowlist via `safeHref`; never `dangerouslySetInnerHTML`. Import the default
+ * styles once from `@calendar-module/react/styles`.
  */
-export { CalendarMonth, type CalendarMonthProps } from './CalendarMonth.js';
+
+// Public mount API
 export {
-  EventDetailPopover,
-  DayPopover,
-  type DayEntry,
-} from './popovers.js';
+  MonthCalendar,
+  type MonthCalendarProps,
+  type CalendarWindow,
+  type CalendarTheme,
+} from './MonthCalendar.js';
+
+// Internal skin + render-slot contexts; `CalendarMonth` is a deprecated config-based alias.
+export {
+  MonthSkin,
+  CalendarMonth,
+  type MonthSkinProps,
+  type CalendarMonthProps,
+  type EventPopoverSlotCtx,
+  type DayPopoverSlotCtx,
+  type LegendSlotCtx,
+} from './CalendarMonth.js';
+
+// Built-in pieces (so a slot override can compose with them)
+export { EventDetailPopover, DayPopover, type DayEntry } from './popovers.js';
 export { MonthSkeleton, EmptyWindow, FetchError } from './states.js';
 export { safeHref } from './format.js';
+
+// Contract validators + types re-exported for host-side use (validate before passing in).
+export {
+  validateEvent,
+  validateWindow,
+  validateConfig,
+  calendarEventJsonSchema,
+  type CalendarEvent,
+  type Occurrence,
+  type CalendarConfig,
+  type ValidationResult,
+} from '@calendar-module/contract';

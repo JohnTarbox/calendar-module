@@ -1,0 +1,22 @@
+{
+  "name": "@calendar-module/mmatf-adapter-reference",
+  "version": "0.0.0",
+  "private": true,
+  "description": "REFERENCE adapter (events+event_days → CalendarEvent). Owned by the MMATF dev; not a published module package.",
+  "license": "Apache-2.0",
+  "type": "module",
+  "exports": {
+    ".": "./adapter.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@calendar-module/contract": "workspace:*",
+    "luxon": "^3.5.0"
+  },
+  "devDependencies": {
+    "@types/luxon": "^3.4.2",
+    "typescript": "^5.7.2"
+  }
+}

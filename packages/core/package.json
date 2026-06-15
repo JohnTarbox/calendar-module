@@ -1,6 +1,6 @@
 {
   "name": "@calendar-module/core",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Headless events-calendar engine — pure TS, no React/DOM/Cloudflare.",
   "license": "Apache-2.0",
   "type": "module",
@@ -13,7 +13,9 @@
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsup",
     "typecheck": "tsc --noEmit"

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, type ReactNode } from 'react';
+import { useMemo, useRef, useState, type CSSProperties, type ReactNode } from 'react';
 import type { CalendarConfig, CalendarEvent, Occurrence } from '@calendar-module/contract';
 import {
   buildMonthGrid,
@@ -18,7 +18,34 @@ import { dayNumber, monthTitle, weekdayShort } from './format.js';
 import { EmptyWindow, FetchError, MonthSkeleton } from './states.js';
 import { DayPopover, EventDetailPopover, type DayEntry } from './popovers.js';
 
-export interface CalendarMonthProps {
+/** Render-slot contexts — each slot receives the same data its built-in default would. */
+export interface EventPopoverSlotCtx {
+  event: CalendarEvent;
+  occ: Occurrence;
+  now: string;
+  close: () => void;
+  addToCalendar: (event: CalendarEvent, occ: Occurrence) => void;
+}
+export interface DayPopoverSlotCtx {
+  date: DayKey;
+  entries: DayEntry[];
+  locale: string | undefined;
+  close: () => void;
+  selectEvent: (entry: DayEntry) => void;
+  viewFullDay: (date: DayKey) => void;
+}
+export interface LegendSlotCtx {
+  categories: string[];
+  hidden: ReadonlySet<string>;
+  toggle: (category: string) => void;
+}
+
+/**
+ * `MonthSkin` — the internal Month renderer (config-based API). The public, host-facing mount
+ * API is `MonthCalendar` (see `MonthCalendar.tsx`), which builds the `CalendarConfig` from flat
+ * props. `CalendarMonth` is kept as a deprecated alias of this for one major (the worker uses it).
+ */
+export interface MonthSkinProps {
   events: CalendarEvent[];
   config: CalendarConfig;
   /** ISO string the host pins at request time — keeps "today" stable across the SSR boundary. */
@@ -27,12 +54,22 @@ export interface CalendarMonthProps {
   caps?: LayoutCaps;
   status?: 'loading' | 'loaded' | 'error';
   onRetry?: () => void;
+  /** CSS custom properties (theme tokens) applied to the calendar root. */
+  themeVars?: CSSProperties;
   /** Date-number click target (Day view in the full app; v0 falls through to the day popover). */
   onNavigateToDay?: (date: DayKey) => void;
   /** Host action slot (e.g. MMATF heart) rendered in the detail popover. */
   renderEventActions?: (event: CalendarEvent, occ: Occurrence) => ReactNode;
   /** Receives the generated .ics; defaults to a browser download. */
   onExportIcs?: (ics: string, filename: string) => void;
+  /** Fired when the visible period changes (next/prev/today/jump). */
+  onNavigate?: (next: { anchor: DayKey; window: { start: DayKey; end: DayKey } }) => void;
+  /** Fired when the category-visibility set changes. */
+  onLegendFilterChange?: (hidden: ReadonlySet<string>) => void;
+  /** Render-slot overrides; each falls back to the built-in when omitted. */
+  renderEventPopover?: (ctx: EventPopoverSlotCtx) => ReactNode;
+  renderDayPopover?: (ctx: DayPopoverSlotCtx) => ReactNode;
+  renderLegend?: (ctx: LegendSlotCtx) => ReactNode;
 }
 
 const DEFAULT_CAPS: LayoutCaps = { cellHeight: 120, headerHeight: 24, rowHeight: 24 };
@@ -58,7 +95,7 @@ function occurrencesOnDay(events: CalendarEvent[], date: DayKey, cfg: CalendarCo
   });
 }
 
-export function CalendarMonth(props: CalendarMonthProps): ReactNode {
+export function MonthSkin(props: MonthSkinProps): ReactNode {
   const { events, config, now, status = 'loaded', onRetry, onNavigateToDay, renderEventActions } = props;
   const caps = props.caps ?? DEFAULT_CAPS;
 
@@ -81,6 +118,32 @@ export function CalendarMonth(props: CalendarMonthProps): ReactNode {
     for (const e of events) if (e.category) set.add(e.category);
     return [...set].sort();
   }, [events]);
+  const categoryByEvent = useMemo(() => {
+    const m = new Map<string, string>();
+    for (const e of events) if (e.category) m.set(e.id, e.category);
+    return m;
+  }, [events]);
+
+  const catColor = (cat: string | undefined): string | undefined =>
+    cat ? config.categoryColors?.[cat] : undefined;
+  const eventColor = (eventId: string): string | undefined => catColor(categoryByEvent.get(eventId));
+
+  function windowForAnchor(a: DayKey): { start: DayKey; end: DayKey } {
+    const g = buildMonthGrid(a, config, now);
+    const lastW = g.weeks[g.weeks.length - 1]!;
+    return { start: g.weeks[0]!.cells[0]!.date, end: lastW.cells[lastW.cells.length - 1]!.date };
+  }
+  function navigate(nextAnchor: DayKey): void {
+    setAnchor(nextAnchor);
+    props.onNavigate?.({ anchor: nextAnchor, window: windowForAnchor(nextAnchor) });
+  }
+  function toggleCategory(cat: string): void {
+    const nextSet = new Set(hidden);
+    if (nextSet.has(cat)) nextSet.delete(cat);
+    else nextSet.add(cat);
+    setHidden(nextSet);
+    props.onLegendFilterChange?.(nextSet);
+  }
 
   function openTrigger(el: HTMLElement): void {
     triggerRef.current = el;
@@ -126,9 +189,9 @@ export function CalendarMonth(props: CalendarMonthProps): ReactNode {
     const intent = resolveKey(e.key, 'v0');
     if (intent.kind === 'nav') {
       e.preventDefault();
-      if (intent.dir === 'next') setAnchor(nextMonth(anchor));
-      else if (intent.dir === 'prev') setAnchor(prevMonth(anchor));
-      else setAnchor(todayMonthAnchor(now, config));
+      if (intent.dir === 'next') navigate(nextMonth(anchor));
+      else if (intent.dir === 'prev') navigate(prevMonth(anchor));
+      else navigate(todayMonthAnchor(now, config));
     }
   }
 
@@ -148,16 +211,16 @@ export function CalendarMonth(props: CalendarMonthProps): ReactNode {
 
   if (status === 'loading') {
     return (
-      <div className="cm-root" data-testid="cm-root">
-        <Toolbar {...{ layout, config, anchor, now, setAnchor }} />
+      <div className="cm-root" data-testid="cm-root" style={props.themeVars}>
+        <Toolbar {...{ layout, config, anchor, now, navigate }} />
         <MonthSkeleton />
       </div>
     );
   }
   if (status === 'error') {
     return (
-      <div className="cm-root" data-testid="cm-root">
-        <Toolbar {...{ layout, config, anchor, now, setAnchor }} />
+      <div className="cm-root" data-testid="cm-root" style={props.themeVars}>
+        <Toolbar {...{ layout, config, anchor, now, navigate }} />
         <FetchError onRetry={onRetry} />
       </div>
     );
@@ -170,35 +233,33 @@ export function CalendarMonth(props: CalendarMonthProps): ReactNode {
   const dayEntries = popover.kind === 'day' ? occurrencesOnDay(events, popover.date, config) : [];
 
   return (
-    <div className="cm-root" data-testid="cm-root">
-      <Toolbar {...{ layout, config, anchor, now, setAnchor }} />
+    <div className="cm-root" data-testid="cm-root" style={props.themeVars}>
+      <Toolbar {...{ layout, config, anchor, now, navigate }} />
 
-      {categories.length > 0 && (
-        <div className="cm-legend" role="group" aria-label="Filter by category" data-testid="cm-legend">
-          {categories.map((cat) => {
-            const isHidden = hidden.has(cat);
-            return (
+      {categories.length > 0 &&
+        (props.renderLegend ? (
+          props.renderLegend({ categories, hidden, toggle: toggleCategory })
+        ) : (
+          <div className="cm-legend" role="group" aria-label="Filter by category" data-testid="cm-legend">
+            {categories.map((cat) => (
               <label key={cat} className="cm-legend-item">
                 <input
                   type="checkbox"
-                  checked={!isHidden}
+                  checked={!hidden.has(cat)}
                   data-testid={`cm-legend-${cat}`}
-                  onChange={() =>
-                    setHidden((prev) => {
-                      const nextSet = new Set(prev);
-                      if (nextSet.has(cat)) nextSet.delete(cat);
-                      else nextSet.add(cat);
-                      return nextSet;
-                    })
-                  }
+                  onChange={() => toggleCategory(cat)}
                 />
-                <span className="cm-dot" data-category={cat} aria-hidden="true" />
+                <span
+                  className="cm-dot"
+                  data-category={cat}
+                  aria-hidden="true"
+                  style={catColor(cat) ? { background: catColor(cat) } : undefined}
+                />
                 {cat}
               </label>
-            );
-          })}
-        </div>
-      )}
+            ))}
+          </div>
+        ))}
 
       {layout.ongoingStrips.length > 0 && (
         <ul className="cm-ongoing-band" data-testid="cm-ongoing-band">
@@ -208,6 +269,7 @@ export function CalendarMonth(props: CalendarMonthProps): ReactNode {
                 type="button"
                 className="cm-ongoing-strip"
                 tabIndex={-1}
+                style={eventColor(s.eventId) ? { background: eventColor(s.eventId) } : undefined}
                 onClick={(e) => openEvent(s.eventId, s.occurrenceId, e.currentTarget)}
               >
                 Ongoing through {s.throughDate}: {s.title}
@@ -273,7 +335,10 @@ export function CalendarMonth(props: CalendarMonthProps): ReactNode {
                       className={'cm-ribbon' + (r.continuesLeft ? ' cm-clip-left' : '') + (r.continuesRight ? ' cm-clip-right' : '')}
                       data-testid="cm-ribbon"
                       tabIndex={-1}
-                      style={{ ['--cm-span' as string]: r.endColumn - r.startColumn + 1 }}
+                      style={{
+                        ['--cm-span' as string]: r.endColumn - r.startColumn + 1,
+                        ...(eventColor(r.eventId) ? { background: eventColor(r.eventId) } : {}),
+                      }}
                       onClick={(e) => {
                         e.stopPropagation();
                         openEvent(r.eventId, r.occurrenceId, e.currentTarget);
@@ -295,7 +360,11 @@ export function CalendarMonth(props: CalendarMonthProps): ReactNode {
                         openEvent(t.eventId, t.occurrenceId, e.currentTarget);
                       }}
                     >
-                      <span className="cm-dot" aria-hidden="true" />
+                      <span
+                        className="cm-dot"
+                        aria-hidden="true"
+                        style={eventColor(t.eventId) ? { background: eventColor(t.eventId) } : undefined}
+                      />
                       {t.timeLabel && <span className="cm-timed-time">{t.timeLabel}</span>}
                       <span className="cm-timed-title">{t.title}</span>
                     </button>
@@ -322,47 +391,79 @@ export function CalendarMonth(props: CalendarMonthProps): ReactNode {
         ))}
       </div>
 
-      {popover.kind === 'event' && selectedEvent && selectedOcc && (
-        <EventDetailPopover
-          event={selectedEvent}
-          occ={selectedOcc}
-          now={now}
-          config={config}
-          onClose={closePopover}
-          onAddToCalendar={exportIcs}
-          renderActions={renderEventActions}
-        />
-      )}
+      {popover.kind === 'event' &&
+        selectedEvent &&
+        selectedOcc &&
+        (props.renderEventPopover ? (
+          props.renderEventPopover({
+            event: selectedEvent,
+            occ: selectedOcc,
+            now,
+            close: closePopover,
+            addToCalendar: exportIcs,
+          })
+        ) : (
+          <EventDetailPopover
+            event={selectedEvent}
+            occ={selectedOcc}
+            now={now}
+            config={config}
+            onClose={closePopover}
+            onAddToCalendar={exportIcs}
+            renderActions={renderEventActions}
+          />
+        ))}
 
-      {popover.kind === 'day' && (
-        <DayPopover
-          date={popover.date}
-          entries={dayEntries}
-          locale={config.locale}
-          onClose={closePopover}
-          onViewFullDay={(d) => {
-            closePopover();
-            onNavigateToDay?.(d);
-          }}
-          onSelectEvent={(entry) => setPopover({ kind: 'event', eventId: entry.event.id, occId: entry.occ.id })}
-        />
-      )}
+      {popover.kind === 'day' &&
+        (props.renderDayPopover ? (
+          props.renderDayPopover({
+            date: popover.date,
+            entries: dayEntries,
+            locale: config.locale,
+            close: closePopover,
+            selectEvent: (entry) => setPopover({ kind: 'event', eventId: entry.event.id, occId: entry.occ.id }),
+            viewFullDay: (d) => {
+              closePopover();
+              onNavigateToDay?.(d);
+            },
+          })
+        ) : (
+          <DayPopover
+            date={popover.date}
+            entries={dayEntries}
+            locale={config.locale}
+            onClose={closePopover}
+            onViewFullDay={(d) => {
+              closePopover();
+              onNavigateToDay?.(d);
+            }}
+            onSelectEvent={(entry) => setPopover({ kind: 'event', eventId: entry.event.id, occId: entry.occ.id })}
+          />
+        ))}
     </div>
   );
 }
+
+/**
+ * @deprecated Use `MonthCalendar` (the flat-prop, host-facing mount API). Kept one major as a
+ * config-based alias so existing consumers (the demo worker) don't break.
+ */
+export const CalendarMonth = MonthSkin;
+/** @deprecated Alias of {@link MonthSkinProps}. */
+export type CalendarMonthProps = MonthSkinProps;
 
 function Toolbar({
   layout,
   config,
   anchor,
   now,
-  setAnchor,
+  navigate,
 }: {
   layout: { year: number; month: number };
   config: CalendarConfig;
   anchor: DayKey;
   now: string;
-  setAnchor: (a: DayKey) => void;
+  navigate: (a: DayKey) => void;
 }): ReactNode {
   const todayDisabled = isTodayInView(anchor, now, config);
   return (
@@ -372,14 +473,14 @@ function Toolbar({
         className="cm-today"
         data-testid="cm-today"
         disabled={todayDisabled}
-        onClick={() => setAnchor(todayMonthAnchor(now, config))}
+        onClick={() => navigate(todayMonthAnchor(now, config))}
       >
         Today
       </button>
-      <button type="button" className="cm-prev" data-testid="cm-prev" aria-label="Previous month" onClick={() => setAnchor(prevMonth(anchor))}>
+      <button type="button" className="cm-prev" data-testid="cm-prev" aria-label="Previous month" onClick={() => navigate(prevMonth(anchor))}>
         ‹
       </button>
-      <button type="button" className="cm-next" data-testid="cm-next" aria-label="Next month" onClick={() => setAnchor(nextMonth(anchor))}>
+      <button type="button" className="cm-next" data-testid="cm-next" aria-label="Next month" onClick={() => navigate(nextMonth(anchor))}>
         ›
       </button>
       <h1 className="cm-range-title" data-testid="cm-range-title">
