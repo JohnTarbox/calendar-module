@@ -1,6 +1,6 @@
 {
   "name": "@jonnyboats/calendar-core",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Headless events-calendar engine — pure TS, no React/DOM/Cloudflare.",
   "license": "Apache-2.0",
   "repository": {
