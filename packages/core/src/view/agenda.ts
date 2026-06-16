@@ -43,6 +43,8 @@ export interface AgendaItem {
   /** The `displayTimeZone` day this row groups under (literal date for all-day). */
   readonly groupDay: DayKey;
   readonly allDay: boolean;
+  /** True iff this occurrence renders as "Ongoing through {date}" (>14d / explicit, §1.5). */
+  readonly ongoing: boolean;
   readonly sortStartMs: number;
   readonly cursor: AgendaCursor;
 }
@@ -102,6 +104,7 @@ function toItem(event: CalendarEvent, occ: Occurrence, cfg: CalendarConfig): Age
     span,
     groupDay: span.startDay,
     allDay: occ.allDay,
+    ongoing: isOccurrenceOngoing(event, occ, cfg),
     sortStartMs,
     cursor: { startMs: sortStartMs, occurrenceId: occ.id },
   };
@@ -136,8 +139,7 @@ export function buildAgenda(
         continue;
       }
 
-      const isMultiOrOngoing =
-        item.span.spanDays > 1 || isOccurrenceOngoing(event, occ, cfg);
+      const isMultiOrOngoing = item.span.spanDays > 1 || item.ongoing;
       const stillLive = compareDay(item.span.endDayInclusive, todayKey) >= 0;
 
       if (isMultiOrOngoing && stillLive) pinned.push(item);

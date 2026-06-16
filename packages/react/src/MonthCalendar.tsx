@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import type { CalendarEvent, Occurrence } from '@jonnyboats/calendar-contract';
 import { validateConfig } from '@jonnyboats/calendar-contract';
 import { addDays, type DayKey, type LayoutCaps } from '@jonnyboats/calendar-core';
@@ -8,6 +8,7 @@ import {
   type EventPopoverSlotCtx,
   type LegendSlotCtx,
 } from './CalendarMonth.js';
+import { themeToVars, type CalendarTheme, type CalendarWindow } from './theme.js';
 
 /**
  * `MonthCalendar` — the stable, host-facing mount API (the seam a host app codes against).
@@ -20,24 +21,7 @@ import {
  * This is a client component (see the `"use client"` directive injected into the package entry).
  */
 
-/** The data window the host loaded. See `onNavigate` for the active grid window to refetch. */
-export interface CalendarWindow {
-  start: DayKey; // inclusive
-  end: DayKey; // inclusive
-}
-
-/** Flat theme tokens, mapped to the calendar's CSS custom properties on the root. */
-export interface CalendarTheme {
-  fg?: string;
-  muted?: string;
-  border?: string;
-  today?: string;
-  accent?: string;
-  bg?: string;
-  fontFamily?: string;
-  /** category → color; drives the legend swatch, dots, and ribbons. */
-  categoryColors?: Record<string, string>;
-}
+export type { CalendarWindow, CalendarTheme } from './theme.js';
 
 export interface MonthCalendarProps {
   events: CalendarEvent[];
@@ -72,19 +56,6 @@ export interface MonthCalendarProps {
   renderDayPopover?: (ctx: DayPopoverSlotCtx) => ReactNode;
   renderLegend?: (ctx: LegendSlotCtx) => ReactNode;
   renderEventActions?: (event: CalendarEvent, occ: Occurrence) => ReactNode;
-}
-
-function themeToVars(theme: CalendarTheme | undefined): CSSProperties | undefined {
-  if (!theme) return undefined;
-  const vars: Record<string, string> = {};
-  if (theme.fg) vars['--cm-fg'] = theme.fg;
-  if (theme.muted) vars['--cm-muted'] = theme.muted;
-  if (theme.border) vars['--cm-border'] = theme.border;
-  if (theme.today) vars['--cm-today'] = theme.today;
-  if (theme.accent) vars['--cm-accent'] = theme.accent;
-  if (theme.bg) vars['--cm-bg'] = theme.bg;
-  if (theme.fontFamily) vars['fontFamily'] = theme.fontFamily;
-  return Object.keys(vars).length ? (vars as CSSProperties) : undefined;
 }
 
 export function MonthCalendar(props: MonthCalendarProps): ReactNode {
