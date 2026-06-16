@@ -278,3 +278,78 @@
 .cm-sched-skeleton-row {
   height: 2.25rem;
 }
+
+/* ── Year view (AVS §3) ────────────────────────────────────────────────── */
+.cm-year-grids {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  padding: 0.5rem;
+}
+@media (max-width: 900px) {
+  .cm-year-grids {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 520px) {
+  .cm-year-grids {
+    grid-template-columns: 1fr;
+  }
+}
+.cm-year-month-title {
+  display: block;
+  width: 100%;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  padding: 0.25rem;
+  cursor: pointer;
+  border-radius: 4px;
+}
+.cm-year-month-title:hover {
+  color: var(--cm-accent);
+}
+.cm-year-weekdays,
+.cm-year-week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+.cm-year-weekday {
+  font-size: 0.6rem;
+  color: var(--cm-muted);
+  text-align: center;
+}
+.cm-year-cell {
+  position: relative;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  border-radius: 50%;
+  cursor: pointer;
+}
+.cm-year-cell.cm-muted {
+  color: var(--cm-muted);
+  opacity: 0.45;
+  cursor: default;
+}
+.cm-year-cell.cm-today {
+  background: var(--cm-today);
+  color: #fff;
+}
+.cm-year-cell:focus-visible {
+  outline: 2px solid var(--cm-accent);
+  outline-offset: 1px;
+}
+.cm-year-dot {
+  position: absolute;
+  bottom: 1px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--cm-accent);
+}

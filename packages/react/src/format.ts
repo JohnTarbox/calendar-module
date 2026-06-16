@@ -21,6 +21,12 @@ export function monthTitle(year: number, month: number, locale = 'en-US'): strin
   return new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric', timeZone: 'UTC' }).format(d);
 }
 
+/** Month name only, e.g. "January" — used as a Year mini-month title (the year is in the toolbar). */
+export function monthName(year: number, month: number, locale = 'en-US'): string {
+  const d = new Date(Date.UTC(year, month - 1, 1, 12));
+  return new Intl.DateTimeFormat(locale, { month: 'long', timeZone: 'UTC' }).format(d);
+}
+
 export function weekdayShort(weekday: number, locale = 'en-US'): string {
   // weekday 0=Sun … 6=Sat. 2023-01-01 was a Sunday → use it as a reference week.
   const d = new Date(Date.UTC(2023, 0, 1 + weekday, 12));

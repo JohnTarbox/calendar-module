@@ -35,6 +35,15 @@ export {
   type ScheduleSkinProps,
 } from './Schedule.js';
 
+// Year view (v1-b)
+export {
+  YearCalendar,
+  YearSkin,
+  type YearCalendarProps,
+  type YearSkinProps,
+} from './Year.js';
+export { occurrencesOnDay } from './entries.js';
+
 // Built-in pieces (so a slot override can compose with them)
 export { EventDetailPopover, DayPopover, type DayEntry } from './popovers.js';
 export { MonthSkeleton, ScheduleSkeleton, EmptyWindow, FetchError } from './states.js';
