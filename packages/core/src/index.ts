@@ -61,6 +61,15 @@ export {
   type AgendaPage,
 } from './view/agenda.js';
 
+// Year presence (v1-b)
+export {
+  buildPresence,
+  presentDays,
+  presenceCategories,
+  UNCATEGORIZED,
+  type PresenceMap,
+} from './view/presence.js';
+
 // Layout (lane-packing + ribbon×overflow)
 export { packMonth } from './layout/pack-month.js';
 export {

@@ -3,7 +3,6 @@ import type { CalendarConfig, CalendarEvent, Occurrence } from '@jonnyboats/cale
 import {
   buildMonthGrid,
   packMonth,
-  resolveSpan,
   resolveKey,
   createGridFocus,
   isTodayInView,
@@ -17,6 +16,7 @@ import {
 import { dayNumber, formatDayMedium, monthTitle, weekdayShort } from './format.js';
 import { EmptyWindow, FetchError, MonthSkeleton } from './states.js';
 import { DayPopover, EventDetailPopover, type DayEntry } from './popovers.js';
+import { occurrencesOnDay } from './entries.js';
 
 /** Render-slot contexts — each slot receives the same data its built-in default would. */
 export interface EventPopoverSlotCtx {
@@ -78,22 +78,6 @@ type PopoverState =
   | { kind: 'none' }
   | { kind: 'event'; eventId: string; occId: string }
   | { kind: 'day'; date: DayKey };
-
-function occurrencesOnDay(events: CalendarEvent[], date: DayKey, cfg: CalendarConfig): DayEntry[] {
-  const out: DayEntry[] = [];
-  for (const event of events) {
-    for (const occ of event.occurrences) {
-      const span = resolveSpan(occ, cfg, event.id);
-      if (span.startDay <= date && date <= span.endDayInclusive) {
-        out.push({ event, occ, timeLabel: span.timeLabel, allDay: occ.allDay });
-      }
-    }
-  }
-  return out.sort((a, b) => {
-    if (a.allDay !== b.allDay) return a.allDay ? -1 : 1; // all-day first
-    return (a.timeLabel ?? '').localeCompare(b.timeLabel ?? '');
-  });
-}
 
 export function MonthSkin(props: MonthSkinProps): ReactNode {
   const { events, config, now, status = 'loaded', onRetry, onNavigateToDay, renderEventActions } = props;

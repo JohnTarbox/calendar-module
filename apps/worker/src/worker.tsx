@@ -8,6 +8,7 @@ import {
   buildAgenda,
   pageForward,
   pageEarlier,
+  buildPresence,
   bucketDay,
   addDays,
   type AgendaCursor,
@@ -172,6 +173,25 @@ export default {
           },
           { headers: { 'cache-control': 's-maxage=300, stale-while-revalidate=600' } },
         );
+      } catch (err) {
+        return Response.json({ error: String((err as Error).message) }, { status: 500 });
+      }
+    }
+
+    // --- Year presence endpoint (AVS §3.2): GET /api/presence?year= ---
+    // Returns a per-day per-category presence map for the year — dates + category labels, NO
+    // event payloads (review S1-2). The client recomputes Year dots + the legend filter from it.
+    if (url.pathname === '/api/presence') {
+      const yearParam = Number(url.searchParams.get('year'));
+      const year = Number.isFinite(yearParam) && yearParam > 0
+        ? yearParam
+        : Number(bucketDay(now, config.displayTimeZone).slice(0, 4));
+      try {
+        const events = await fetchWindow(env, `${year}-01-01`, `${year}-12-31`, config.displayTimeZone);
+        const presence = buildPresence(events, config, year);
+        return Response.json(presence, {
+          headers: { 'cache-control': 's-maxage=300, stale-while-revalidate=600' },
+        });
       } catch (err) {
         return Response.json({ error: String((err as Error).message) }, { status: 500 });
       }
