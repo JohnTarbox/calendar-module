@@ -101,6 +101,19 @@ export const CalendarConfigSchema = z
       .describe('0 = Sunday (US default), 1 = Monday. Drives the Month grid + weekday header.'),
     locale: z.string().optional().describe('BCP-47 (default "en-US").'),
     showWeekNumbers: z.boolean().optional().describe('ISO-8601 week-of-year via Luxon; default false.'),
+    agendaPageSize: z
+      .number()
+      .int()
+      .positive()
+      .max(200)
+      .optional()
+      .describe('Schedule keyset page size — events per page (AVS §2.3/§9). Default 25.'),
+    scheduleRowAction: z
+      .enum(['responsive', 'popover', 'navigate'])
+      .optional()
+      .describe(
+        'Schedule row-click behavior (AVS §2.2/§9). "responsive" = detail popover on desktop, navigate to the event page on mobile. Default "responsive".',
+      ),
   })
   .passthrough();
 

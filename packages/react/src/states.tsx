@@ -16,10 +16,20 @@ export function MonthSkeleton(): ReactNode {
   );
 }
 
-export function EmptyWindow(): ReactNode {
+export function ScheduleSkeleton(): ReactNode {
+  return (
+    <div className="cm-skeleton cm-sched-skeleton" data-testid="cm-loading" aria-busy="true" aria-live="polite">
+      {Array.from({ length: 5 }).map((_, i) => (
+        <div className="cm-skeleton-row cm-sched-skeleton-row" key={i} data-testid="cm-skeleton-row" />
+      ))}
+    </div>
+  );
+}
+
+export function EmptyWindow({ message = 'No events in this period.' }: { message?: string } = {}): ReactNode {
   return (
     <div className="cm-empty" data-testid="cm-empty">
-      No events in this period.
+      {message}
     </div>
   );
 }

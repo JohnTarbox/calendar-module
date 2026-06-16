@@ -185,3 +185,96 @@
   align-items: center;
   padding: 1rem;
 }
+
+/* ── Schedule / Agenda view (AVS §2) ───────────────────────────────────── */
+.cm-schedule {
+  display: block;
+}
+.cm-sched-pinned {
+  border: 1px solid var(--cm-border);
+  border-radius: 8px;
+  padding: 0.5rem 0.75rem;
+  margin: 0 0.5rem 0.75rem;
+}
+.cm-sched-pinned-head,
+.cm-sched-day {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--cm-muted);
+  margin: 0.75rem 0 0.25rem;
+}
+.cm-sched-day-today {
+  color: var(--cm-today);
+}
+.cm-sched-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.cm-sched-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 6px;
+}
+.cm-sched-row:hover {
+  background: color-mix(in srgb, var(--cm-fg) 6%, transparent);
+}
+.cm-sched-row:focus-visible {
+  outline: 2px solid var(--cm-accent);
+  outline-offset: 1px;
+}
+.cm-sched-time {
+  flex: 0 0 auto;
+  min-width: 6rem;
+  color: var(--cm-muted);
+  font-variant-numeric: tabular-nums;
+}
+.cm-sched-title {
+  flex: 1 1 auto;
+  font-weight: 500;
+}
+.cm-sched-loc {
+  flex: 0 1 auto;
+  color: var(--cm-muted);
+  font-size: 0.85rem;
+}
+.cm-sched-stream {
+  padding: 0 0.5rem;
+}
+.cm-sched-today-anchor {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--cm-today);
+  padding: 0.5rem 0;
+}
+.cm-sched-load-earlier,
+.cm-sched-load-more {
+  display: block;
+  width: 100%;
+  padding: 0.6rem;
+  margin: 0.5rem 0;
+  border: 1px solid var(--cm-border);
+  border-radius: 6px;
+  background: none;
+  color: var(--cm-accent);
+  font: inherit;
+  cursor: pointer;
+}
+.cm-sched-end {
+  text-align: center;
+  color: var(--cm-muted);
+  padding: 0.75rem;
+  font-size: 0.85rem;
+}
+.cm-sched-skeleton-row {
+  height: 2.25rem;
+}

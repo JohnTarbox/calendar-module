@@ -27,9 +27,17 @@ export {
   type LegendSlotCtx,
 } from './CalendarMonth.js';
 
+// Schedule / Agenda view (v1-a) — host-facing mount API + internal skin
+export {
+  ScheduleCalendar,
+  ScheduleSkin,
+  type ScheduleCalendarProps,
+  type ScheduleSkinProps,
+} from './Schedule.js';
+
 // Built-in pieces (so a slot override can compose with them)
 export { EventDetailPopover, DayPopover, type DayEntry } from './popovers.js';
-export { MonthSkeleton, EmptyWindow, FetchError } from './states.js';
+export { MonthSkeleton, ScheduleSkeleton, EmptyWindow, FetchError } from './states.js';
 export { safeHref } from './format.js';
 
 // Contract validators + types re-exported for host-side use (validate before passing in).

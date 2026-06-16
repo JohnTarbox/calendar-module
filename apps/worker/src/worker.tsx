@@ -2,7 +2,17 @@ import { createElement } from 'react';
 import { renderToString } from 'react-dom/server';
 import type { CalendarConfig } from '@jonnyboats/calendar-contract';
 import { validateConfig } from '@jonnyboats/calendar-contract';
-import { buildMonthGrid, todayMonthAnchor } from '@jonnyboats/calendar-core';
+import {
+  buildMonthGrid,
+  todayMonthAnchor,
+  buildAgenda,
+  pageForward,
+  pageEarlier,
+  bucketDay,
+  addDays,
+  type AgendaCursor,
+  type AgendaItem,
+} from '@jonnyboats/calendar-core';
 import { CalendarMonth } from '@jonnyboats/calendar-react';
 import { fetchWindow, type Env } from './data.js';
 
@@ -40,6 +50,37 @@ function escapeForScript(json: string): string {
     .replace(/</g, '\\u003c')
     .replace(new RegExp('\\u2028', 'g'), '\\u2028')
     .replace(new RegExp('\\u2029', 'g'), '\\u2029');
+}
+
+/** Parse the over-the-wire keyset cursor `${startMs}:${occurrenceId}` (AVS §2.3). */
+function parseCursor(raw: string | null): AgendaCursor | null {
+  if (!raw) return null;
+  const i = raw.indexOf(':');
+  if (i < 0) return null;
+  const startMs = Number(raw.slice(0, i));
+  const occurrenceId = raw.slice(i + 1);
+  return Number.isFinite(startMs) && occurrenceId ? { startMs, occurrenceId } : null;
+}
+
+/** Serialize one agenda row to a render-ready DTO (the skin reads these fields). */
+function agendaRow(item: AgendaItem): Record<string, unknown> {
+  return {
+    eventId: item.eventId,
+    occurrenceId: item.occurrenceId,
+    title: item.event.title,
+    category: item.event.category ?? null,
+    url: item.event.url ?? null,
+    start: item.occurrence.start,
+    allDay: item.allDay,
+    location: item.occurrence.location ?? null,
+    mapUrl: item.occurrence.mapUrl ?? null,
+    groupDay: item.groupDay,
+    ongoing: item.ongoing,
+    timeLabel: item.span.timeLabel ?? null,
+    spanDays: item.span.spanDays,
+    endDayInclusive: item.span.endDayInclusive,
+    cursor: `${item.cursor.startMs}:${item.cursor.occurrenceId}`,
+  };
 }
 
 function htmlShell(body: string, dataScript: string, status = 200): Response {
@@ -91,6 +132,46 @@ export default {
         return Response.json(events, {
           headers: { 'cache-control': 's-maxage=300, stale-while-revalidate=600' },
         });
+      } catch (err) {
+        return Response.json({ error: String((err as Error).message) }, { status: 500 });
+      }
+    }
+
+    // --- Schedule keyset endpoint (AVS §2.3): GET /api/agenda?cursor=&pageSize=&dir= ---
+    // Demo over D1: fetch a window around "now" and paginate it with the core keyset. A
+    // production adapter would push the `(start, occurrenceId)` compare into SQL (WHERE
+    // (start, id) > (?, ?) LIMIT n); the cursor contract + page shape are identical.
+    if (url.pathname === '/api/agenda') {
+      const dir = url.searchParams.get('dir') === 'earlier' ? 'earlier' : 'forward';
+      const pageSizeRaw = Number(url.searchParams.get('pageSize'));
+      const pageSize = Number.isFinite(pageSizeRaw) && pageSizeRaw > 0 ? Math.min(200, pageSizeRaw) : 25;
+      const cursor = parseCursor(url.searchParams.get('cursor'));
+      const todayKey = bucketDay(now, config.displayTimeZone);
+      // forward fetches [today, +400d]; the day<=to/end_day>=from window still catches an
+      // ongoing/multi-day event that STARTED before today (→ pinned). earlier fetches the past.
+      const from = dir === 'earlier' ? addDays(todayKey, -400) : todayKey;
+      const to = dir === 'earlier' ? addDays(todayKey, -1) : addDays(todayKey, 400);
+      try {
+        const events = await fetchWindow(env, from, to, config.displayTimeZone);
+        const model = buildAgenda(events, config, now);
+        const page =
+          dir === 'earlier'
+            ? pageEarlier(model.past, cursor, pageSize)
+            : pageForward(model.stream, cursor, pageSize);
+        return Response.json(
+          {
+            dir,
+            items: page.items.map(agendaRow),
+            nextCursor: page.nextCursor
+              ? `${page.nextCursor.startMs}:${page.nextCursor.occurrenceId}`
+              : null,
+            hasMore: page.hasMore,
+            // The pinned "Happening now / Ongoing" section rides only on the first forward page;
+            // it is NOT part of the keyset stream, so it never perturbs the cursor (§2.1a).
+            pinned: dir === 'forward' && !cursor ? model.pinned.map(agendaRow) : [],
+          },
+          { headers: { 'cache-control': 's-maxage=300, stale-while-revalidate=600' } },
+        );
       } catch (err) {
         return Response.json({ error: String((err as Error).message) }, { status: 500 });
       }

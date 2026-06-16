@@ -50,3 +50,31 @@ export function formatDayMedium(dayKey: string, locale = 'en-US'): string {
     timeZone: 'UTC',
   }).format(dayDate(dayKey));
 }
+
+/** Schedule date-group header, e.g. "Tue · June 16" (AVS §2.1). */
+export function formatScheduleHeader(dayKey: string, locale = 'en-US'): string {
+  const d = dayDate(dayKey);
+  const weekday = new Intl.DateTimeFormat(locale, { weekday: 'short', timeZone: 'UTC' }).format(d);
+  const monthDay = new Intl.DateTimeFormat(locale, {
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(d);
+  return `${weekday} · ${monthDay}`;
+}
+
+/** Compact day-range label, e.g. "Jun 1 – 5" / "Jun 28 – Jul 2" (AVS §1.5 multi-day rows). */
+export function formatDayRange(startKey: string, endKey: string, locale = 'en-US'): string {
+  const start = dayDate(startKey);
+  const end = dayDate(endKey);
+  const sameMonth = startKey.slice(0, 7) === endKey.slice(0, 7);
+  const startLabel = new Intl.DateTimeFormat(locale, {
+    month: 'short',
+    day: 'numeric',
+    timeZone: 'UTC',
+  }).format(start);
+  const endLabel = sameMonth
+    ? new Intl.DateTimeFormat(locale, { day: 'numeric', timeZone: 'UTC' }).format(end)
+    : new Intl.DateTimeFormat(locale, { month: 'short', day: 'numeric', timeZone: 'UTC' }).format(end);
+  return `${startLabel} – ${endLabel}`;
+}
