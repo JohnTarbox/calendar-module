@@ -44,6 +44,15 @@ export {
 } from './Year.js';
 export { occurrencesOnDay } from './entries.js';
 
+// Week / Day / Custom time-grid (v2-a/v2-b)
+export {
+  TimeGridCalendar,
+  TimeGridSkin,
+  type TimeGridCalendarProps,
+  type TimeGridSkinProps,
+  type TimeGridView,
+} from './TimeGrid.js';
+
 // Built-in pieces (so a slot override can compose with them)
 export { EventDetailPopover, DayPopover, type DayEntry } from './popovers.js';
 export { MonthSkeleton, ScheduleSkeleton, EmptyWindow, FetchError } from './states.js';
