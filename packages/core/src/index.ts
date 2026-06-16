@@ -46,6 +46,21 @@ export {
   normalizeMonthAnchor,
 } from './view/navigation.js';
 
+// Schedule / Agenda (v1-a)
+export {
+  buildAgenda,
+  pageForward,
+  pageEarlier,
+  groupByDay,
+  hasEventsOn,
+  compareCursor,
+  type AgendaCursor,
+  type AgendaItem,
+  type AgendaDayGroup,
+  type AgendaModel,
+  type AgendaPage,
+} from './view/agenda.js';
+
 // Layout (lane-packing + ribbon×overflow)
 export { packMonth } from './layout/pack-month.js';
 export {
