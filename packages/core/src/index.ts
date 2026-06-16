@@ -70,6 +70,30 @@ export {
   type PresenceMap,
 } from './view/presence.js';
 
+// Week / Day / Custom time-grid (v2-a/v2-b)
+export {
+  packDayColumn,
+  peakConcurrency,
+  blockBox,
+  type TimedSegment,
+  type PositionedBlock,
+} from './layout/collision.js';
+export {
+  dayLengthMinutes,
+  minutesSinceMidnight,
+  nowLineFraction,
+} from './time/grid.js';
+export {
+  dayColumnSegments,
+  packStrip,
+  alignWeekStart,
+  rangeDays,
+  type StripRibbon,
+  type StripOverflowCol,
+  type OngoingBand,
+  type StripLayout,
+} from './view/timegrid.js';
+
 // Layout (lane-packing + ribbon×overflow)
 export { packMonth } from './layout/pack-month.js';
 export {

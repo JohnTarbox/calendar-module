@@ -114,6 +114,25 @@ export const CalendarConfigSchema = z
       .describe(
         'Schedule row-click behavior (AVS §2.2/§9). "responsive" = detail popover on desktop, navigate to the event page on mobile. Default "responsive".',
       ),
+    customViewDays: z
+      .number()
+      .int()
+      .min(2)
+      .max(7)
+      .optional()
+      .describe('Custom view range in days, 2–7 (AVS §5/§9). Default 4.'),
+    minBlockPx: z
+      .number()
+      .positive()
+      .optional()
+      .describe('Week/Day timed-block minimum rendered height in px (AVS §4.2/§6/§9). Default 22. Visual only — never affects collision math.'),
+    weekScrollAnchorHour: z
+      .number()
+      .int()
+      .min(0)
+      .max(23)
+      .optional()
+      .describe('Week/Day default scroll fallback hour when today is not visible and the window has no events (AVS §4.2/§9). Default 7.'),
   })
   .passthrough();
 
